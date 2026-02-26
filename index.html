@@ -708,10 +708,16 @@ body {
     <h2>Chọn tỉnh thành của bạn</h2>
     <p>Xem nhiệt độ & độ ẩm trung bình, nhận gợi ý loài hoa phù hợp nhất</p>
     <div class="input-row">
-      <select id="provinceSelect" style="flex:1;padding:11px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#f7f3ee;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;cursor:pointer" onchange="onProvinceChange()">
-        <option value="" style="color:#1a1208">-- Chọn tỉnh / thành phố --</option>
-      </select>
+      <button id="provinceBtn" onclick="openProvinceSheet()" style="flex:1;padding:11px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#f7f3ee;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span id="provinceBtnText">📍 Chọn tỉnh / thành phố</span>
+        <span style="opacity:0.6;font-size:0.75rem">▼</span>
+      </button>
     </div>
+
+    <!-- Hidden select for compatibility -->
+    <select id="provinceSelect" style="display:none" onchange="onProvinceChange()">
+      <option value="">-- Chọn --</option>
+    </select>
     <div class="weather-pills" id="wPills" style="display:none"></div>
   </div>
 
@@ -834,6 +840,27 @@ body {
 <!-- DETAIL OVERLAY -->
 <div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
   <div class="detail-sheet" id="detailSheet"></div>
+</div>
+
+<!-- PROVINCE BOTTOM SHEET -->
+<div id="provinceOverlay" onclick="closeProvinceSheet(event)" style="display:none;position:fixed;inset:0;background:rgba(26,18,8,0.6);z-index:400;align-items:flex-end;justify-content:center">
+  <div id="provinceSheet" style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:85vh;display:flex;flex-direction:column;animation:slideUp 0.3s ease">
+    <!-- Handle -->
+    <div style="display:flex;justify-content:center;padding:10px 0 0">
+      <div style="width:40px;height:4px;background:#e0d8d0;border-radius:2px"></div>
+    </div>
+    <!-- Header -->
+    <div style="padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5ddd4">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700">📍 Chọn tỉnh / thành phố</h3>
+      <button onclick="closeProvinceSheet()" style="width:32px;height:32px;border-radius:50%;border:1px solid #e5ddd4;background:#f7f3ee;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <!-- Search -->
+    <div style="padding:12px 20px;border-bottom:1px solid #e5ddd4">
+      <input id="provinceSearch" type="text" placeholder="🔍 Tìm tỉnh thành..." oninput="filterProvinceList()" style="width:100%;padding:10px 14px;border-radius:12px;border:1px solid #e5ddd4;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;background:#f7f3ee">
+    </div>
+    <!-- List -->
+    <div id="provinceList" style="overflow-y:auto;flex:1;padding:8px 0 20px"></div>
+  </div>
 </div>
 
 <!-- COMPARE BAR -->
@@ -1795,6 +1822,61 @@ function renderReminders() {
 
 function doneRem(i) { reminders[i].done = !reminders[i].done; localStorage.setItem('hv_rem',JSON.stringify(reminders)); renderReminders(); }
 function delRem(i) { reminders.splice(i,1); localStorage.setItem('hv_rem',JSON.stringify(reminders)); renderReminders(); }
+
+// ============================================================
+//  PROVINCE BOTTOM SHEET
+// ============================================================
+function openProvinceSheet() {
+  const overlay = document.getElementById('provinceOverlay');
+  overlay.style.display = 'flex';
+  document.getElementById('provinceSearch').value = '';
+  renderProvinceList('');
+  setTimeout(() => document.getElementById('provinceSearch').focus(), 300);
+}
+
+function closeProvinceSheet(e) {
+  if (!e || (e.target && e.target === document.getElementById('provinceOverlay'))) {
+    document.getElementById('provinceOverlay').style.display = 'none';
+  }
+}
+
+function filterProvinceList() {
+  const q = document.getElementById('provinceSearch').value;
+  renderProvinceList(q);
+}
+
+function renderProvinceList(q) {
+  const list = document.getElementById('provinceList');
+  const lower = q.toLowerCase();
+  const groups = {north:[], central:[], highland:[], south:[]};
+  PROVINCES.forEach(p => {
+    if (!lower || p.name.toLowerCase().includes(lower)) groups[p.region].push(p);
+  });
+  const regionOrder = ['north','central','highland','south'];
+  let html = '';
+  regionOrder.forEach(reg => {
+    if (!groups[reg].length) return;
+    html += '<div style="padding:8px 20px 4px;font-size:0.72rem;font-weight:700;color:#6b5744;text-transform:uppercase;letter-spacing:0.06em">' + REGION_NAMES[reg] + '</div>';
+    groups[reg].forEach(p => {
+      const climateLabel = p.temp < 22 ? '🌿 Mát' : p.temp < 26 ? '🌤 Ôn hòa' : '☀️ Nóng';
+      html += '<div onclick="selectProvince(\'' + p.name.replace(/'/g,"\\'") + '\')" style="padding:13px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;active:background:#f0e8e0" onmouseover="this.style.background=\'#faf7f3\'" onmouseout="this.style.background=\'transparent\'">'
+        + '<div style="font-size:0.92rem;font-weight:600">' + p.name + '</div>'
+        + '<div style="display:flex;gap:8px;align-items:center">'
+        + '<span style="font-size:0.75rem;color:#6b5744">' + climateLabel + '</span>'
+        + '<span style="font-size:0.75rem;background:#f7f3ee;border:1px solid #e5ddd4;border-radius:6px;padding:2px 8px">' + p.temp + '°C · ' + p.hum + '%</span>'
+        + '</div></div>';
+    });
+  });
+  if (!html) html = '<div style="text-align:center;padding:30px;color:#6b5744;font-size:0.88rem">Không tìm thấy tỉnh thành nào</div>';
+  list.innerHTML = html;
+}
+
+function selectProvince(name) {
+  document.getElementById('provinceSelect').value = name;
+  document.getElementById('provinceBtnText').textContent = '📍 ' + name;
+  document.getElementById('provinceOverlay').style.display = 'none';
+  onProvinceChange();
+}
 
 function checkReminders() {
   const now = new Date();
