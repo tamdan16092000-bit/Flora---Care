@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 Flora Care – Chăm Sóc & Chẩn Đoán Bệnh Hoa</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f3ee;
+  --surface: #ffffff;
+  --surface2: #faf7f3;
+  --border: #e5ddd4;
+  --text: #1a1208;
+  --text2: #6b5744;
+  --accent: #b5451b;
+  --accent2: #d4a853;
+  --green: #3d7a4f;
+  --blue: #2c5f8a;
+  --purple: #7c4d9e;
+  --pink: #c2547a;
+  --shadow: 0 2px 16px rgba(26,18,8,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,18,8,0.14);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* === HEADER === */
+.header {
+  background: var(--text);
+  color: #f7f3ee;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  gap: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.logo { font-size: 1.8rem; animation: spin-float 4s ease-in-out infinite; }
+@keyframes spin-float { 0%,100%{transform:rotate(-5deg) translateY(0)} 50%{transform:rotate(5deg) translateY(-3px)} }
+.header-info h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.header-info p { font-size: 0.72rem; opacity: 0.6; font-weight: 300; }
+.header-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.weather-chip {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.weather-chip:hover { background: rgba(255,255,255,0.18); }
+
+/* === NAV === */
+.nav {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(0,0,0,0.2);
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-item {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(247,243,238,0.6);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.nav-item:hover { color: #f7f3ee; background: rgba(255,255,255,0.05); }
+.nav-item.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+/* === MAIN === */
+.main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 100px; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeUp 0.3s ease; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* === LOCATION HERO === */
+.hero-card {
+  background: linear-gradient(135deg, var(--text) 0%, #3d2410 100%);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  color: #f7f3ee;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content: '🌸🌺🌻🌼🌷';
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  font-size: 5rem;
+  opacity: 0.08;
+  letter-spacing: -10px;
+  transform: rotate(20deg);
+}
+.hero-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+.hero-card p { font-size: 0.82rem; opacity: 0.7; margin-bottom: 16px; }
+.input-row { display: flex; gap: 8px; }
+.input-row input {
+  flex: 1;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: #f7f3ee;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border 0.2s;
+}
+.input-row input::placeholder { color: rgba(247,243,238,0.45); }
+.input-row input:focus { border-color: var(--accent2); }
+.btn { padding: 11px 20px; border-radius: 12px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; }
+.btn-amber { background: var(--accent2); color: #1a1208; }
+.btn-amber:hover { background: #c4933e; transform: translateY(-1px); }
+.btn-red { background: var(--accent); color: white; }
+.btn-red:hover { background: #9c3a14; }
+.btn-green { background: var(--green); color: white; }
+.btn-green:hover { background: #2e5e3b; }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
+.weather-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.pill {
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* === SUGGESTION BANNER === */
+.suggest-box {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border: 1px solid #a5d6a7;
+  border-left: 4px solid var(--green);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: none;
+}
+.suggest-box.show { display: block; animation: fadeUp 0.3s; }
+.suggest-box h4 { color: var(--green); font-size: 0.9rem; margin-bottom: 6px; }
+.suggest-box p { font-size: 0.83rem; color: #2e7d32; line-height: 1.6; }
+
+/* === FILTER BAR === */
+.filter-bar {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+.search-box {
+  flex: 1;
+  min-width: 180px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  outline: none;
+  background: var(--bg);
+}
+.search-box:focus { border-color: var(--accent2); }
+.filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.fchip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+.fchip:hover, .fchip.on { background: var(--accent); color: white; border-color: var(--accent); }
+.fchip.on-green { background: var(--green); color: white; border-color: var(--green); }
+.count-badge { font-size: 0.72rem; color: var(--text2); margin-left: auto; white-space: nowrap; }
+
+/* === FLOWERS GRID === */
+.flowers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 14px;
+}
+.fcard {
+  background: var(--surface);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.fcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.fcard.selected { border-color: var(--accent); }
+.fcard-thumb {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  position: relative;
+}
+.fcard-season-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.fcard-body { padding: 10px 12px 12px; }
+.fcard-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; line-height: 1.2; margin-bottom: 3px; }
+.fcard-latin { font-size: 0.67rem; color: var(--text2); font-style: italic; margin-bottom: 8px; }
+.fcard-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag { font-size: 0.65rem; padding: 2px 6px; border-radius: 20px; font-weight: 600; }
+.tg-region { background: #fce4ec; color: #880e4f; }
+.tg-diff { background: #e8eaf6; color: #283593; }
+.tg-type { background: #e0f2f1; color: #004d40; }
+
+/* === DETAIL MODAL / PANEL === */
+.detail-overlay {
+  position: fixed; inset: 0;
+  background: rgba(26,18,8,0.6);
+  z-index: 300;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+}
+.detail-overlay.open { display: flex; animation: fadeIn 0.2s; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.detail-sheet {
+  background: var(--surface);
+  border-radius: 24px 24px 20px 20px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+.detail-banner {
+  padding: 24px 24px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 1;
+}
+.detail-emoji-big { font-size: 3.5rem; flex-shrink: 0; }
+.detail-title-area { flex: 1; }
+.detail-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 700; }
+.detail-latin { font-style: italic; font-size: 0.82rem; color: var(--text2); margin-bottom: 6px; }
+.detail-close {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.detail-close:hover { background: #f0e8e0; }
+
+.detail-body { padding: 16px 24px 24px; }
+
+/* Accordion */
+.acc { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+.acc-head {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  user-select: none;
+  background: var(--surface);
+  transition: background 0.15s;
+}
+.acc-head:hover { background: var(--bg); }
+.acc-icon { font-size: 1rem; }
+.acc-arrow { margin-left: auto; color: var(--text2); font-size: 0.7rem; transition: transform 0.25s; }
+.acc.open .acc-arrow { transform: rotate(180deg); }
+.acc-body {
+  display: none;
+  padding: 14px 16px;
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  font-size: 0.83rem;
+  line-height: 1.75;
+}
+.acc.open .acc-body { display: block; }
+
+.info-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.ic {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+}
+.ic-label { font-size: 0.65rem; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+.ic-val { font-weight: 700; }
+
+.stage-nav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.sn {
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+.sn:hover, .sn.on { background: var(--accent2); color: #1a1208; border-color: var(--accent2); }
+.sc { display: none; }
+.sc.on { display: block; }
+
+/* === CALENDAR === */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.cal-month {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 6px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.cal-month:last-child { border-right: none; }
+.cal-row { display: contents; }
+.cal-cell {
+  border-right: 1px solid var(--border);
+  height: 24px;
+  position: relative;
+}
+.cal-cell:last-child { border-right: none; }
+.cal-cell.plant { background: rgba(61,122,79,0.25); }
+.cal-cell.flower { background: rgba(181,69,27,0.25); }
+.cal-cell.harvest { background: rgba(212,168,83,0.35); }
+.cal-label {
+  padding: 5px 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  grid-column: 1/-1;
+}
+.cal-flower-row { display: grid; grid-template-columns: 120px repeat(12, 1fr); border-bottom: 1px solid var(--border); }
+.cal-fname {
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  border-right: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--surface);
+}
+.cal-dot { font-size: 0.9rem; flex-shrink: 0; }
+
+/* === COMPARE === */
+.compare-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--text);
+  color: #f7f3ee;
+  padding: 12px 20px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  z-index: 150;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+}
+.compare-bar.show { display: flex; }
+.compare-slots { display: flex; gap: 8px; flex: 1; }
+.cslot {
+  background: rgba(255,255,255,0.12);
+  border: 1px dashed rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.cslot.filled { border-style: solid; background: rgba(255,255,255,0.18); }
+.btn-compare { padding: 8px 18px; background: var(--accent2); color: var(--text); border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.82rem; font-family: 'DM Sans',sans-serif; }
+.btn-compare-clear { padding: 8px 14px; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: 10px; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 0.8rem; font-family: 'DM Sans',sans-serif; }
+
+/* COMPARE TABLE */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.cmp-table th { background: var(--text); color: #f7f3ee; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 0.85rem; }
+.cmp-table td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+.cmp-table tr:nth-child(even) td { background: var(--surface2); }
+.cmp-table .row-label { font-weight: 700; color: var(--text2); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* === DISEASE === */
+.disease-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.dgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.dcard {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.dcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.dtype { display: inline-block; font-size: 0.67rem; font-weight: 700; padding: 3px 8px; border-radius: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.dt-f { background: #e8f5e9; color: #1b5e20; }
+.dt-p { background: #fff3e0; color: #bf360c; }
+.dt-b { background: #fce4ec; color: #880e4f; }
+.dt-ph { background: #e3f2fd; color: #0d47a1; }
+.dname { font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+.dsym { font-size: 0.79rem; color: var(--text2); line-height: 1.55; margin-bottom: 10px; }
+.dtx { background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border-left: 3px solid var(--green); padding: 9px 12px; border-radius: 0 8px 8px 0; font-size: 0.78rem; line-height: 1.55; }
+.dpr { font-size: 0.73rem; color: var(--text2); margin-top: 8px; }
+
+/* === REMOVED === */
+.chat-wrap {
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.chat-header {
+  padding: 16px 20px;
+  background: var(--text);
+  color: #f7f3ee;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; }
+.chat-header p { font-size: 0.73rem; opacity: 0.6; }
+.chat-msgs {
+  height: 360px;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface2);
+}
+.cmsg {
+  max-width: 85%;
+  padding: 11px 15px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.cmsg-ai { background: var(--surface); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+.cmsg-user { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  background: var(--surface);
+}
+.chat-txt {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  resize: none;
+  outline: none;
+  min-height: 42px;
+  max-height: 100px;
+}
+.chat-txt:focus { border-color: var(--accent2); }
+.btn-send {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+.btn-send:hover { background: #9c3a14; }
+.btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* === PHOTO === */
+.upload-area {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 36px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface);
+  margin-bottom: 16px;
+}
+.upload-area:hover { border-color: var(--accent2); background: #fdfaf5; }
+.upload-area p { font-size: 0.88rem; color: var(--text2); margin-top: 8px; }
+.upload-area strong { color: var(--text); }
+#imgPrev { max-width: 100%; border-radius: 14px; display: none; margin-bottom: 14px; max-height: 300px; object-fit: cover; }
+
+/* === REMINDER === */
+.reminder-form {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fl { font-size: 0.74rem; font-weight: 600; color: var(--text2); }
+.fi, .fs {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  background: var(--bg);
+}
+.fi:focus, .fs:focus { border-color: var(--accent2); }
+.rem-list { display: flex; flex-direction: column; gap: 10px; }
+.rem-card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.rem-icon { font-size: 1.8rem; flex-shrink: 0; }
+.rem-body { flex: 1; }
+.rem-title { font-weight: 700; font-size: 0.92rem; }
+.rem-sub { font-size: 0.76rem; color: var(--text2); margin-top: 2px; }
+.rem-acts { display: flex; gap: 6px; }
+.btn-sm {
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+.btn-sm:hover { background: var(--accent2); color: #1a1208; border-color: var(--accent2); }
+.btn-sm.done-btn { background: var(--green); color: white; border-color: var(--green); }
+
+/* === SECTION TITLE === */
+.st {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 20px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.st::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: var(--text);
+  color: #f7f3ee;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  z-index: 500;
+  transition: transform 0.3s;
+  box-shadow: var(--shadow-lg);
+  white-space: nowrap;
+}
+.toast.in { transform: translateX(-50%) translateY(0); }
+
+.spinner { width: 18px; height: 18px; border: 2px solid rgba(247,243,238,0.3); border-top-color: #f7f3ee; border-radius: 50%; display: inline-block; animation: sp 0.65s linear infinite; vertical-align: middle; }
+@keyframes sp { to{transform:rotate(360deg)} }
+.loading-dots::after { content: '…'; animation: ld 1s infinite; }
+@keyframes ld { 0%{content:'.'} 33%{content:'..'} 66%,100%{content:'…'} }
+
+.empty { text-align: center; color: var(--text2); padding: 40px 20px; font-size: 0.9rem; }
+.empty-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+@media(max-width:600px){
+  .flowers-grid{grid-template-columns:repeat(2,1fr)}
+  .detail-sheet{border-radius:20px 20px 0 0;max-height:92vh}
+  .compare-bar{flex-wrap:wrap}
+}
+
+/* === MUSIC SELECTOR === */
+.music-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0; }
+.music-btn {
+  padding:10px 8px; border-radius:12px; border:2px solid var(--border);
+  background:var(--surface); cursor:pointer; text-align:center;
+  font-size:0.75rem; font-weight:600; transition:all 0.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.music-btn:hover { border-color:var(--accent2); background:#fdfaf5; }
+.music-btn.selected { border-color:var(--accent); background:rgba(181,69,27,0.08); color:var(--accent); }
+.music-icon { font-size:1.5rem; display:block; margin-bottom:4px; }
+
+/* === ALARM RINGING OVERLAY === */
+.alarm-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85);
+  z-index:9999; display:none; align-items:center; justify-content:center;
+  flex-direction:column; gap:20px;
+}
+.alarm-overlay.ringing { display:flex; animation:fadeIn 0.3s; }
+.alarm-ring-icon { font-size:5rem; animation:ring-shake 0.5s infinite; }
+@keyframes ring-shake {
+  0%,100%{transform:rotate(-15deg) scale(1.1)}
+  50%{transform:rotate(15deg) scale(1.2)}
+}
+.alarm-msg { color:white; font-size:1.4rem; font-weight:700; text-align:center; padding:0 20px; }
+.alarm-sub { color:rgba(255,255,255,0.7); font-size:0.9rem; text-align:center; }
+.alarm-stop-btn {
+  background:white; color:#1a1208; border:none; border-radius:20px;
+  padding:14px 40px; font-size:1rem; font-weight:700; cursor:pointer;
+  font-family:'DM Sans',sans-serif; box-shadow:0 4px 20px rgba(255,255,255,0.3);
+  transition:transform 0.1s; animation:pulse-btn 1s infinite;
+}
+@keyframes pulse-btn { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+.alarm-stop-btn:hover { transform:scale(1.08); }
+
+/* === NOTIF BADGE === */
+.notif-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  background:#e53935; color:white; font-size:0.65rem; font-weight:700;
+  width:18px; height:18px; border-radius:50%; margin-left:4px;
+  vertical-align:middle;
+}
+
+/* === PHOTO AI UPLOAD === */
+.photo-upload-zone {
+  border:2px dashed var(--border); border-radius:18px; padding:30px 20px;
+  text-align:center; cursor:pointer; transition:all 0.25s;
+  background:var(--surface); position:relative;
+}
+.photo-upload-zone:hover, .photo-upload-zone.drag-over {
+  border-color:var(--accent2); background:#fdfaf5; transform:scale(1.01);
+}
+.photo-upload-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+.ai-result-card {
+  background:var(--surface); border-radius:16px; border:1px solid var(--border);
+  overflow:hidden; margin-bottom:12px; box-shadow:var(--shadow); animation:fadeUp 0.35s;
+}
+.ai-result-header {
+  padding:12px 16px; display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.ai-conf-bar {
+  height:6px; border-radius:3px; background:var(--border); overflow:hidden; margin-top:6px;
+}
+.ai-conf-fill { height:100%; border-radius:3px; transition:width 0.6s ease; }
+.ai-steps { counter-reset:step; }
+.ai-step { display:flex; gap:10px; margin-bottom:8px; font-size:0.82rem; line-height:1.55; }
+.ai-step::before {
+  counter-increment:step; content:counter(step);
+  min-width:22px; height:22px; border-radius:50%;
+  background:var(--green); color:white; font-size:0.72rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;
+}
+
+/* === SUGGEST CARDS ENHANCED === */
+.suggest-card-item {
+  background:white; border:1px solid #a5d6a7; border-radius:12px;
+  padding:10px 14px; cursor:pointer; font-size:0.82rem; font-weight:600;
+  display:flex; align-items:center; gap:8px; transition:all 0.15s;
+  box-shadow:0 1px 6px rgba(0,0,0,0.06);
+}
+.suggest-card-item:hover { background:#e8f5e9; transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.suggest-diff-badge {
+  font-size:0.65rem; padding:2px 7px; border-radius:20px;
+  font-weight:700; margin-left:auto; white-space:nowrap;
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">🌸</div>
+    <div class="header-info">
+      <h1>Flora Care</h1>
+      <p>Chăm sóc hoa · Chẩn đoán bệnh AI · Thư viện 60 loài hoa</p>
+    </div>
+    <div class="header-actions">
+      <div class="weather-chip" id="wChip" onclick="switchTab('home')">📍 Nhập vị trí</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-item active" data-tab="home" onclick="switchTab('home')">🏠 Trang chủ</div>
+    <div class="nav-item" data-tab="library" onclick="switchTab('library')">🌺 60 Loài hoa</div>
+    <div class="nav-item" data-tab="calendar" onclick="switchTab('calendar')">📅 Lịch trồng</div>
+    <div class="nav-item" data-tab="compare" onclick="switchTab('compare')">⚖️ So sánh</div>
+    <div class="nav-item" data-tab="disease" onclick="switchTab('disease')">🔬 Bệnh cây</div>
+    <div class="nav-item" data-tab="photo" onclick="switchTab('photo')">🤖 Chẩn đoán AI</div>
+
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- HOME -->
+<div class="tab-pane active" id="tab-home">
+  <div class="hero-card">
+    <h2>Chọn tỉnh thành của bạn</h2>
+    <p>Xem nhiệt độ & độ ẩm trung bình, nhận gợi ý loài hoa phù hợp nhất</p>
+    <div class="input-row">
+      <button id="provinceBtn" onclick="openProvinceSheet()" style="flex:1;padding:11px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#f7f3ee;font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span id="provinceBtnText">📍 Chọn tỉnh / thành phố</span>
+        <span style="opacity:0.6;font-size:0.75rem">▼</span>
+      </button>
+    </div>
+
+    <!-- Hidden select for compatibility -->
+    <select id="provinceSelect" style="display:none" onchange="onProvinceChange()">
+      <option value="">-- Chọn --</option>
+    </select>
+    <div class="weather-pills" id="wPills" style="display:none"></div>
+  </div>
+
+  <div class="suggest-box" id="suggestBox">
+    <h4>✨ Gợi ý hoa phù hợp với khí hậu của bạn</h4>
+    <p id="suggestTxt"></p>
+    <div id="suggestCards" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"></div>
+  </div>
+
+  <div class="st">🌸 Thư viện hoa nổi bật</div>
+  <div class="flowers-grid" id="homeGrid"></div>
+</div>
+
+<!-- LIBRARY -->
+<div class="tab-pane" id="tab-library">
+  <div class="filter-bar">
+    <input type="text" class="search-box" id="searchBox" placeholder="🔍 Tìm tên hoa..." oninput="applyFilters()">
+    <div class="filter-chips">
+      <div class="fchip on" data-f="all" onclick="setFilter('all',this)">Tất cả</div>
+      <div class="fchip" data-f="Miền Bắc" onclick="setFilter('Miền Bắc',this)">❄️ Miền Bắc</div>
+      <div class="fchip" data-f="Miền Trung" onclick="setFilter('Miền Trung',this)">🌤 Miền Trung</div>
+      <div class="fchip" data-f="Miền Nam" onclick="setFilter('Miền Nam',this)">☀️ Miền Nam</div>
+      <div class="fchip" data-f="Toàn quốc" onclick="setFilter('Toàn quốc',this)">🇻🇳 Toàn quốc</div>
+      <div class="fchip" data-f="Dễ" onclick="setFilter('Dễ',this)">🟢 Dễ trồng</div>
+      <div class="fchip" data-f="Trung bình" onclick="setFilter('Trung bình',this)">🟡 Trung bình</div>
+      <div class="fchip" data-f="Khó" onclick="setFilter('Khó',this)">🔴 Khó</div>
+    </div>
+    <div class="count-badge" id="countBadge">60 loài</div>
+  </div>
+  <div class="flowers-grid" id="libGrid"></div>
+</div>
+
+<!-- CALENDAR -->
+<div class="tab-pane" id="tab-calendar">
+  <div class="st">📅 Lịch trồng hoa theo tháng</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;font-size:0.78rem">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;background:rgba(61,122,79,0.35);border-radius:3px;display:inline-block"></span> Mùa trồng</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;background:rgba(181,69,27,0.3);border-radius:3px;display:inline-block"></span> Mùa hoa nở</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:14px;height:14px;background:rgba(212,168,83,0.4);border-radius:3px;display:inline-block"></span> Thu hoạch/Cắt hoa</span>
+  </div>
+  <div style="overflow-x:auto">
+    <div id="calendarTable" style="min-width:700px"></div>
+  </div>
+</div>
+
+<!-- COMPARE -->
+<div class="tab-pane" id="tab-compare">
+  <div class="st">⚖️ So sánh các loài hoa</div>
+  <p style="font-size:0.85rem;color:var(--text2);margin-bottom:16px">Chọn tối đa 3 loài hoa từ thư viện để so sánh chi tiết. Nhấn biểu tượng ⊕ trên thẻ hoa hoặc dùng nút "So sánh" bên dưới.</p>
+  <div id="compareTable"><div class="empty"><span class="empty-icon">⚖️</span>Chưa chọn hoa để so sánh.<br>Vào tab <strong>60 Loài hoa</strong> và nhấn nút ⊕ trên thẻ hoa.</div></div>
+</div>
+
+<!-- DISEASE -->
+<div class="tab-pane" id="tab-disease">
+  <div class="st">🦠 27 Bệnh Thường Gặp Ở Hoa & Cách Điều Trị</div>
+  <div class="disease-filters">
+    <div class="fchip on" onclick="filterDisease('all',this)">Tất cả (27)</div>
+    <div class="fchip" onclick="filterDisease('fungal',this)">🍄 Nấm (7)</div>
+    <div class="fchip" onclick="filterDisease('pest',this)">🐛 Sâu bệnh (6)</div>
+    <div class="fchip" onclick="filterDisease('bacterial',this)">☣️ Vi khuẩn/Virus (4)</div>
+    <div class="fchip" onclick="filterDisease('physiological',this)">🏜️ Sinh lý (10)</div>
+  </div>
+  <div class="dgrid" id="diseaseGrid"></div>
+</div>
+
+<!-- PHOTO / AI DIAGNOSIS -->
+<div class="tab-pane" id="tab-photo">
+  <div class="st">🤖 Chẩn Đoán Bệnh Hoa Bằng AI</div>
+
+  <!-- Upload Zone -->
+  <div style="background:linear-gradient(135deg,#1a1208 0%,#3d2010 100%);border-radius:20px;padding:22px;margin-bottom:20px;color:#f7f3ee">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;margin-bottom:6px">📸 Tải ảnh lên để AI phân tích bệnh</h3>
+    <p style="font-size:0.8rem;opacity:0.7;margin-bottom:16px">Chụp ảnh lá, hoa hoặc thân cây bị bệnh — AI sẽ tự động nhận diện & đưa ra phác đồ điều trị</p>
+
+    <div class="photo-upload-zone" id="uploadZone"
+         onclick="document.getElementById('photoInput').click()"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="handleDrop(event)">
+      <div id="uploadPlaceholder">
+        <div style="font-size:3rem;margin-bottom:8px">🌿</div>
+        <div style="font-weight:700;font-size:0.95rem;color:var(--text)">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
+        <div style="font-size:0.78rem;color:var(--text2);margin-top:6px">Hỗ trợ JPG, PNG · Chụp rõ vùng bị bệnh</div>
+        <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;opacity:0.8">💡 Mẹo: Chụp gần, đủ ánh sáng, thấy rõ triệu chứng</div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoSelect(event)">
+    </div>
+
+    <img id="imgPrev" alt="Ảnh đã chọn" style="max-width:100%;border-radius:14px;display:none;margin-top:12px;max-height:280px;object-fit:cover;width:100%">
+
+    <div id="aiStatus" style="display:none;margin-top:12px;text-align:center;padding:16px;background:rgba(255,255,255,0.1);border-radius:12px">
+      <div class="spinner"></div>
+      <span style="margin-left:10px;font-size:0.88rem">AI đang phân tích ảnh<span class="loading-dots"></span></span>
+    </div>
+  </div>
+
+  <!-- AI Results -->
+  <div id="aiResults"></div>
+
+  <!-- Divider -->
+  <div class="st" style="margin-top:28px">🔍 Chẩn Đoán Nhanh Theo Triệu Chứng</div>
+  <p style="font-size:0.84rem;color:var(--text2);margin-bottom:14px">Quan sát cây và chọn triệu chứng phù hợp để nhận hướng dẫn điều trị ngay</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">
+    <button class="btn" style="background:#fff3e0;color:#e65100;border:1px solid #ffcc80" onclick="showSymptom('white')">🤍 Bột trắng trên lá</button>
+    <button class="btn" style="background:#fce4ec;color:#880e4f;border:1px solid #f48fb1" onclick="showSymptom('black')">🖤 Đốm đen / nâu</button>
+    <button class="btn" style="background:#fff8e1;color:#f57f17;border:1px solid #ffe082" onclick="showSymptom('yellow')">💛 Lá vàng toàn bộ</button>
+    <button class="btn" style="background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7" onclick="showSymptom('wilt')">🥀 Héo đột ngột</button>
+    <button class="btn" style="background:#e3f2fd;color:#0d47a1;border:1px solid #90caf9" onclick="showSymptom('curl')">🌀 Lá xoăn / biến dạng</button>
+    <button class="btn" style="background:#efebe9;color:#4e342e;border:1px solid #bcaaa4" onclick="showSymptom('rot')">🟤 Thối gốc / rễ</button>
+    <button class="btn" style="background:#e0f2f1;color:#004d40;border:1px solid #80cbc4" onclick="showSymptom('rust')">🦀 Mụn cam / nâu dưới lá</button>
+    <button class="btn" style="background:#f3e5f5;color:#4a148c;border:1px solid #ce93d8" onclick="showSymptom('pest')">🐛 Rệp / sâu bám cây</button>
+    <button class="btn" style="background:#e8f5e9;color:#2e7d32;border:1px solid #81c784" onclick="showSymptom('mold')">🌫️ Mốc xám / thối hoa</button>
+    <button class="btn" style="background:#fbe9e7;color:#bf360c;border:1px solid #ffab91" onclick="showSymptom('burn')">🔥 Mép lá cháy khô</button>
+    <button class="btn" style="background:#f9fbe7;color:#558b2f;border:1px solid #aed581" onclick="showSymptom('mosaic')">🟩 Đốm vàng xanh loang</button>
+    <button class="btn" style="background:#e8eaf6;color:#283593;border:1px solid #9fa8da" onclick="showSymptom('bud')">🌸 Nụ rụng không nở</button>
+  </div>
+  <div id="symptomResult"></div>
+</div>
+
+
+
+</div><!-- /main -->
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-sheet" id="detailSheet"></div>
+</div>
+
+<!-- PROVINCE BOTTOM SHEET -->
+<div id="provinceOverlay" onclick="closeProvinceSheet(event)" style="display:none;position:fixed;inset:0;background:rgba(26,18,8,0.6);z-index:400;align-items:flex-end;justify-content:center">
+  <div id="provinceSheet" style="background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:85vh;display:flex;flex-direction:column;animation:slideUp 0.3s ease">
+    <!-- Handle -->
+    <div style="display:flex;justify-content:center;padding:10px 0 0">
+      <div style="width:40px;height:4px;background:#e0d8d0;border-radius:2px"></div>
+    </div>
+    <!-- Header -->
+    <div style="padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5ddd4">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700">📍 Chọn tỉnh / thành phố</h3>
+      <button onclick="closeProvinceSheet()" style="width:32px;height:32px;border-radius:50%;border:1px solid #e5ddd4;background:#f7f3ee;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <!-- Search -->
+    <div style="padding:12px 20px;border-bottom:1px solid #e5ddd4">
+      <input id="provinceSearch" type="text" placeholder="🔍 Tìm tỉnh thành..." oninput="filterProvinceList()" style="width:100%;padding:10px 14px;border-radius:12px;border:1px solid #e5ddd4;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;background:#f7f3ee">
+    </div>
+    <!-- List -->
+    <div id="provinceList" style="overflow-y:auto;flex:1;padding:8px 0 20px"></div>
+  </div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compareBar">
+  <span style="font-size:0.8rem;font-weight:600;white-space:nowrap">So sánh:</span>
+  <div class="compare-slots" id="cmpSlots"></div>
+  <button class="btn-compare" onclick="showCompare()">Xem so sánh</button>
+  <button class="btn-compare-clear" onclick="clearCompare()">✕</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  FLOWER DATA – 50 SPECIES
+// ============================================================
+const FLOWERS = [
+  // MIỀN BẮC / TÂY BẮC
+  {id:'hoa-man',     name:'Hoa Mận',          emoji:'🌸', latin:'Prunus salicina',         region:'Miền Bắc',   diff:'Trung bình', type:'Cây ăn quả',   color:'#e91e63', plant:[11,12,1],  bloom:[1,2,3],   harvest:[6,7],
+   light:'6-8h/ngày', temp:'5-25°C', hum:'60-75%', pH:'6.0-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + trấu hun 20%', drain:'Tốt',
+   n:{seed:'NPK 30-10-10 loãng 2t/lần',grow:'NPK 20-20-20 + phân chuồng hoai 1kg/gốc',flower:'NPK 6-30-30, giảm N tăng P K',fruit:'Canxi + Bo tránh nứt quả'},
+   care:'Tưới 1-2x/tuần. Tỉa sau thu hoạch. Cần chilling requirement >400h dưới 10°C',
+   seed:'Tỷ lệ 60-80%. Ngâm nước ấm 24h + ủ lạnh 4-8 tuần. Nhân vô tính bằng ghép/chiết.'},
+  {id:'hoa-ban',     name:'Hoa Ban',           emoji:'🌺', latin:'Bauhinia variegata',      region:'Miền Bắc',   diff:'Dễ',          type:'Cây cảnh',     color:'#9c27b0', plant:[3,4,5],    bloom:[2,3,4],   harvest:[],
+   light:'6-8h/ngày', temp:'15-30°C', hum:'60-80%', pH:'5.5-7.0',
+   mix:'Đất thịt 60% + phân hữu cơ 25% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 loãng 2t/lần',grow:'NPK 15-15-15 mỗi 1-2 tháng',flower:'Tăng P K trước 4-6 tuần ra hoa',fruit:'NPK 20-20-20 phục hồi sau ra hoa'},
+   care:'Tưới 2-3x/tuần mùa khô. Tỉa sau khi hoa tàn. Chịu hạn tốt hơn úng',
+   seed:'Tỷ lệ 70-85%. Ngâm 50°C 24h hoặc khía vỏ. Nảy mầm 7-14 ngày.'},
+  {id:'tam-giac-mach',name:'Hoa Tam Giác Mạch',emoji:'🌾', latin:'Fagopyrum esculentum',   region:'Miền Bắc',   diff:'Dễ',          type:'Hoa dại',      color:'#e91e63', plant:[10,11],    bloom:[12,1],    harvest:[1,2],
+   light:'5-7h/ngày', temp:'10-22°C', hum:'70-85%', pH:'5.5-6.5',
+   mix:'Đất cát pha 50% + phân hữu cơ 30% + đất mùn rừng 20%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ bón lót 5-10 tấn/ha',grow:'NPK 5-10-5 nhẹ + thúc N khi cao 15-20cm',flower:'Tăng P K, phân hữu cơ lỏng',fruit:'Dừng bón N khi hoa nở'},
+   care:'Tưới 1-2x/ngày mùa khô. Ít tỉa, ngắt ngọn để phân cành',
+   seed:'Tỷ lệ 85-95%. Ngâm 4-6h. Nảy mầm 3-5 ngày. Chu kỳ 70-90 ngày.'},
+  {id:'dao-bac-ha',  name:'Đào Bắc Hà',        emoji:'🌸', latin:'Prunus persica',         region:'Miền Bắc',   diff:'Trung bình', type:'Cây ăn quả',   color:'#f48fb1', plant:[10,11],    bloom:[1,2],     harvest:[6,7],
+   light:'7-8h/ngày', temp:'5-20°C', hum:'55-70%', pH:'6.0-7.0',
+   mix:'Đất thịt pha 60% + phân hữu cơ 25% + cát sỏi 15%', drain:'Rất tốt',
+   n:{seed:'NPK 20-10-10 nhẹ mỗi 2 tuần',grow:'NPK cân bằng + Canxi định kỳ',flower:'Kali cao trước nụ, giảm đạm',fruit:'Canxi + Kali + Bo khi quả phát triển'},
+   care:'Tưới sâu 2x/tuần. Tỉa nhánh sau thu hoạch. Phun thuốc phòng nấm vào mùa mưa',
+   seed:'Tỷ lệ 70-85%. Ủ lạnh 500-800h chill. Thường ghép mắt lên gốc mận.'},
+  {id:'moc-lan',     name:'Hoa Mộc Lan',       emoji:'🌼', latin:'Magnolia grandiflora',   region:'Miền Bắc',   diff:'Trung bình', type:'Cây cảnh',     color:'#fff9c4', plant:[3,4],      bloom:[3,4,5],   harvest:[],
+   light:'5-7h/ngày', temp:'15-28°C', hum:'65-80%', pH:'5.0-6.5',
+   mix:'Đất chua giàu mùn 60% + xơ dừa 20% + perlite 20%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ loãng + Fe chelate',grow:'NPK 10-10-10 mỗi 4-6 tuần',flower:'Giảm N, tăng P K trước ra hoa',fruit:'Phân hữu cơ phục hồi'},
+   care:'Tưới đều đặn, không để khô. Bón Fe chelate nếu lá vàng. Không chịu đất kiềm',
+   seed:'Tỷ lệ 50-60%. Hạt cần thu ngay khi chín. Nảy mầm chậm 30-60 ngày.'},
+
+  // HOA CẢNH PHỔ BIẾN
+  {id:'hong',        name:'Hoa Hồng',          emoji:'🌹', latin:'Rosa hybrida',           region:'Toàn quốc',  diff:'Trung bình', type:'Hoa cảnh',     color:'#e53935', plant:[11,12,1,2],bloom:[3,4,5,10,11],harvest:[],
+   light:'6-8h/ngày', temp:'15-28°C', hum:'60-75%', pH:'6.0-7.0',
+   mix:'Đất thịt 40% + phân hữu cơ 30% + cát 20% + trấu hun 10%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ đầu tiên',grow:'NPK 20-10-10 tăng sinh khối',flower:'NPK 5-20-20 + phân bón lá Kali mỗi 2 tuần',fruit:'Canxi + Magiê sau mỗi đợt hoa'},
+   care:'Tưới gốc 2-3x/tuần. Tỉa nụ chùm, cắt cành già sau mỗi đợt hoa. Phun phòng nấm 2 tuần/lần',
+   seed:'Tỷ lệ 40-60% hạt. Thường nhân vô tính bằng giâm cành (tỷ lệ 80-90%).'},
+  {id:'cuc',         name:'Hoa Cúc',           emoji:'🌼', latin:'Chrysanthemum morifolium',region:'Toàn quốc', diff:'Dễ',          type:'Hoa cảnh',     color:'#ffc107', plant:[7,8,9],    bloom:[10,11,12,1],harvest:[],
+   light:'6-8h/ngày', temp:'15-25°C', hum:'60-75%', pH:'6.0-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK 20-20-20 loãng mỗi tuần',grow:'NPK 20-10-10 tăng đạm để phát lộc',flower:'NPK 10-30-20 + phân Kali cao kích nụ',fruit:'Phân hữu cơ + Magiê duy trì'},
+   care:'Tưới đều 1-2x/ngày. Ngắt lá già, tỉa nụ phụ. Điều chỉnh quang kỳ (che tối để ra hoa)',
+   seed:'Tỷ lệ 60-70%. Thường nhân vô tính bằng tách chồi hoặc giâm cành (tỷ lệ 90%+).'},
+  {id:'huong-duong', name:'Hoa Hướng Dương',    emoji:'🌻', latin:'Helianthus annuus',      region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#ff8f00', plant:[2,3,8,9], bloom:[5,6,11,12],harvest:[7,8],
+   light:'8+h/ngày', temp:'20-30°C', hum:'40-60%', pH:'6.0-7.5',
+   mix:'Đất thịt 40% + cát 30% + phân hữu cơ 30%', drain:'Rất tốt',
+   n:{seed:'NPK 20-20-20 x0.5 liều mỗi 2 tuần',grow:'NPK 15-5-10 + phân N tháng',flower:'NPK 5-20-20 hoặc 6-30-30 trước nụ 3-4 tuần',fruit:'Canxi + Bo + Kẽm khi hạt phát triển'},
+   care:'Tưới sâu gốc 2-3x/tuần. Chịu hạn tốt. Cắm cọc cho cây cao. Trồng thẳng đất cho rễ ăn sâu',
+   seed:'Tỷ lệ 85-95%. Ngâm nước ấm 8-12h. Gieo sâu 2-4cm. Ra hoa sau 70-90 ngày.'},
+  {id:'dong-tien',   name:'Hoa Đồng Tiền',     emoji:'🌸', latin:'Gerbera jamesonii',      region:'Toàn quốc',  diff:'Dễ',          type:'Hoa cảnh',     color:'#f44336', plant:[3,4,9,10], bloom:[5,6,7,11,12],harvest:[],
+   light:'5-7h/ngày', temp:'18-25°C', hum:'60-70%', pH:'5.5-6.5',
+   mix:'Xơ dừa 40% + đất thịt 30% + perlite 20% + trấu hun 10%', drain:'Rất tốt',
+   n:{seed:'Phân tổng hợp loãng + Fe định kỳ',grow:'NPK 20-20-20 cân bằng',flower:'NPK thấp N, cao P K mỗi 10 ngày',fruit:'Magiê + Sắt duy trì màu sắc lá'},
+   care:'Tưới gốc, tránh ướt lá và đầu chồi. Tỉa lá già 2 tuần/lần. Đặt cây cao so với mặt đất',
+   seed:'Tỷ lệ 40-60%. Hạt ngắn hạn, gieo trong 3-6 tháng sau thu. Nảy mầm 10-20 ngày.'},
+  {id:'lily',        name:'Hoa Ly (Huệ Tây)',  emoji:'🪷', latin:'Lilium hybrid',          region:'Toàn quốc',  diff:'Trung bình', type:'Hoa cảnh',     color:'#fff3e0', plant:[10,11,12], bloom:[1,2,3,4], harvest:[],
+   light:'6-8h/ngày', temp:'15-25°C', hum:'60-75%', pH:'6.0-7.0',
+   mix:'Đất cát pha 50% + phân hữu cơ 30% + perlite 20%', drain:'Tốt',
+   n:{seed:'Phân bón củ (Superphosphate) khi trồng',grow:'NPK 20-10-10 tăng lá',flower:'NPK 5-15-20 + Canxi + Bo',fruit:'Dừng bón khi hoa tàn, để lá tích dinh dưỡng cho củ'},
+   care:'Tưới 2-3x/tuần. Trồng củ sâu 15cm. Buộc cọc khi cây cao. Cắt đầu nhụy để hoa bền',
+   seed:'Nhân giống bằng tách củ con (tỷ lệ 95%). Hạt khó, mất 2-3 năm ra hoa.'},
+  {id:'tulip',       name:'Hoa Tulip',         emoji:'🌷', latin:'Tulipa gesneriana',      region:'Miền Bắc',   diff:'Khó',         type:'Hoa cảnh',     color:'#e040fb', plant:[11,12],    bloom:[1,2,3],   harvest:[],
+   light:'5-6h/ngày', temp:'5-18°C', hum:'55-70%', pH:'6.0-7.0',
+   mix:'Đất cát pha 60% + phân hữu cơ 25% + perlite 15%', drain:'Rất tốt',
+   n:{seed:'Superphosphate + Kali khi trồng củ',grow:'NPK 10-20-20 định kỳ',flower:'Kali cao, tránh N dư',fruit:'Để lá tàn tự nhiên cho củ tích năng lượng'},
+   care:'Tưới vừa phải 2x/tuần. Không để đất ẩm quá. Ủ lạnh củ 8-10 tuần trước trồng',
+   seed:'Chỉ nhân giống bằng củ con. Mỗi năm bổ sung củ mới. Khó trồng ở đồng bằng.'},
+  {id:'chuoi-hoa',   name:'Hoa Chuối (Heliconia)',emoji:'🌺',latin:'Heliconia psittacorum', region:'Miền Nam',   diff:'Dễ',          type:'Hoa nhiệt đới',color:'#ff6f00', plant:[4,5,6],    bloom:[7,8,9,10,11],harvest:[],
+   light:'6-8h/ngày', temp:'22-35°C', hum:'75-90%', pH:'5.5-7.0',
+   mix:'Đất thịt giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ cao khi trồng chồi',grow:'NPK 20-10-10 mỗi 2 tháng',flower:'NPK 10-20-20 trước ra hoa',fruit:'Kali cao duy trì màu sắc'},
+   care:'Tưới đẫm 3-4x/tuần. Cắt tàu lá già. Chia chồi 2-3 năm/lần',
+   seed:'Nhân giống bằng tách chồi (tỷ lệ 95%). Hoa to bền 3-4 tuần.'},
+  {id:'lan-ho-diep',name:'Lan Hồ Điệp',        emoji:'🦋', latin:'Phalaenopsis amabilis',  region:'Toàn quốc',  diff:'Khó',         type:'Hoa cảnh',     color:'#e1bee7', plant:[9,10],     bloom:[12,1,2,3],harvest:[],
+   light:'3-5h/ngày (sáng lọc)',temp:'18-28°C',hum:'70-80%',pH:'5.5-6.5',
+   mix:'Vỏ thông 50% + xơ dừa 30% + than hoa 20%', drain:'Rất tốt (không dùng đất thường)',
+   n:{seed:'Phân lan chuyên dụng 30-10-10 mùa lá',grow:'Phân 20-20-20 định kỳ 2 tuần',flower:'Phân 6-30-30 vào mùa khô để kích hoa',fruit:'Giảm phân, giữ nhiệt chênh ngày-đêm >5°C'},
+   care:'Tưới 1x/tuần (cây trong chậu thoáng). Phun sương lên rễ khí. Đặt chỗ sáng gián tiếp',
+   seed:'Nhân giống bằng tách keiki (nhánh con) hoặc cắt cành. Không trồng từ hạt thông thường.'},
+  {id:'lan-den',    name:'Lan Đen (Bạch Ngọc)',emoji:'🌸', latin:'Coelogyne cristata',     region:'Miền Bắc',   diff:'Khó',         type:'Hoa cảnh',     color:'#f5f5f5', plant:[9,10],     bloom:[11,12,1], harvest:[],
+   light:'3-5h sáng dịu',temp:'12-25°C',hum:'70-85%',pH:'5.5-6.5',
+   mix:'Vỏ thông 60% + than hoa 25% + xơ dừa 15%', drain:'Rất tốt',
+   n:{seed:'Phân lan nhẹ 20-20-20',grow:'Tăng N mùa tăng trưởng',flower:'Phospho cao mùa lạnh kích hoa',fruit:'Dưỡng ẩm, ít phân khi nghỉ'},
+   care:'Tưới ít mùa đông. Cần nhiệt độ lạnh ban đêm để ra hoa. Độ ẩm cao nhưng thoáng',
+   seed:'Tách cụm giả hành khi trồng kín chậu. Cần 3-5 năm ra hoa từ cây non.'},
+  {id:'mai-vang',   name:'Hoa Mai Vàng',       emoji:'🌼', latin:'Ochna integerrima',     region:'Miền Nam',   diff:'Trung bình', type:'Cây truyền thống',color:'#ffd600',plant:[7,8],     bloom:[1,2],     harvest:[],
+   light:'6-8h/ngày',temp:'20-35°C',hum:'60-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK 20-10-10 mùa tăng trưởng',grow:'Phân hữu cơ + NPK cân bằng',flower:'Kali + Lân cao, rút nước trước Tết 4-6 tuần rồi tưới lại',fruit:'NPK cân bằng phục hồi sau Tết'},
+   care:'Tưới 2-3x/tuần. Tuốt lá trước Tết 4-6 tuần để điều chỉnh ngày nở. Tỉa bonsai theo ý',
+   seed:'Tỷ lệ giâm cành 70-80%. Từ hạt nảy mầm 85-90%. Ra hoa sau 3-5 năm từ hạt.'},
+  {id:'dao-da-lat', name:'Đào Đà Lạt',         emoji:'🌸', latin:'Prunus campanulata',    region:'Miền Trung', diff:'Trung bình', type:'Cây truyền thống',color:'#f06292',plant:[9,10],    bloom:[1,2,3],   harvest:[],
+   light:'6-8h/ngày',temp:'10-22°C',hum:'65-80%',pH:'6.0-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 25% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK 20-20-20 nhẹ',grow:'NPK 15-10-10 + phân hữu cơ 2 tháng/lần',flower:'NPK 6-24-24 trước nụ 6 tuần',fruit:'Canxi + Bo sau ra hoa'},
+   care:'Tưới 2-3x/tuần. Cần nhiệt độ lạnh đêm Đà Lạt để ra hoa đúng Tết',
+   seed:'Ghép mắt tỷ lệ 85-90%. Hạt nảy mầm 60-70%, ra hoa sau 4-5 năm.'},
+  {id:'cuc-vạn-tho', name:'Cúc Vạn Thọ',       emoji:'🌻', latin:'Tagetes erecta',        region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#ff8f00', plant:[10,11,12,1],bloom:[1,2,3],  harvest:[],
+   light:'6-8h/ngày',temp:'15-30°C',hum:'50-70%',pH:'6.0-7.5',
+   mix:'Đất thịt 60% + phân hữu cơ 25% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ',grow:'NPK 20-20-20 định kỳ',flower:'NPK 5-20-20 kích nụ',fruit:'Phân Kali cao duy trì hoa'},
+   care:'Tưới 1-2x/ngày mùa nắng. Ngắt hoa tàn thường xuyên để ra hoa tiếp. Dễ trồng, ít sâu bệnh',
+   seed:'Tỷ lệ 85-95%. Gieo trực tiếp hoặc ươm bầu. Nảy mầm 5-7 ngày. Ra hoa sau 60-70 ngày.'},
+  {id:'hoa-giay',   name:'Hoa Giấy (Bougainvillea)',emoji:'🌺',latin:'Bougainvillea spectabilis',region:'Toàn quốc',diff:'Dễ',type:'Hoa leo',color:'#ff4081',plant:[3,4,5],bloom:[4,5,6,10,11],harvest:[],
+   light:'6-8h/ngày',temp:'20-35°C',hum:'50-70%',pH:'5.5-7.0',
+   mix:'Đất thịt 50% + cát 30% + phân hữu cơ 20%', drain:'Tốt',
+   n:{seed:'NPK kích rễ khi trồng',grow:'NPK 20-10-10 mùa tăng trưởng',flower:'Hạn tưới + NPK 5-20-30 để kích hoa',fruit:'NPK cân bằng sau ra hoa'},
+   care:'Tưới 2-3x/tuần, hạn tưới để kích ra hoa. Tỉa mạnh sau đợt hoa để ra đợt mới',
+   seed:'Giâm cành tỷ lệ 75-85%. Hoa bền 4-8 tuần, thực ra lá bắc chứ không phải cánh hoa.'},
+  {id:'huong-lan',  name:'Hoa Huệ (Dạ Hương)',emoji:'🌸', latin:'Polianthes tuberosa',    region:'Toàn quốc',  diff:'Dễ',          type:'Hoa thơm',     color:'#ffffff', plant:[3,4,9,10], bloom:[6,7,8,12,1],harvest:[],
+   light:'5-7h/ngày',temp:'20-30°C',hum:'65-80%',pH:'6.0-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 30% + cát 15%', drain:'Tốt',
+   n:{seed:'Superphosphate + phân hữu cơ khi trồng củ',grow:'NPK 20-10-10 khi lá mọc 20cm',flower:'NPK 10-20-20 khi thấy nụ',fruit:'Dừng bón khi hoa nở'},
+   care:'Tưới 2-3x/tuần. Trồng củ sâu 5-7cm. Tránh đất ẩm liên tục. Hoa thơm mạnh ban đêm',
+   seed:'Nhân giống bằng tách củ (tỷ lệ 95%). Mỗi 3-4 năm đào và tách lại.'},
+  {id:'phong-lan-rung',name:'Phong Lan Rừng', emoji:'🌿', latin:'Dendrobium nobile',      region:'Miền Bắc',   diff:'Khó',         type:'Hoa cảnh',     color:'#ce93d8', plant:[9,10],     bloom:[1,2,3],   harvest:[],
+   light:'4-6h sáng dịu',temp:'18-28°C',hum:'70-85%',pH:'5.5-6.5',
+   mix:'Vỏ thông 50% + xơ dừa 25% + perlite 15% + than 10%', drain:'Rất tốt',
+   n:{seed:'Phân lan 30-10-10 mùa lá',grow:'Phân cân bằng 20-20-20',flower:'Phân 10-30-20 mùa thu + lạnh đêm',fruit:'Ít phân, giữ khô mùa đông'},
+   care:'Tưới ít mùa đông. Cần chênh lệch nhiệt độ ngày-đêm để ra hoa. Không tưới vào hoa',
+   seed:'Tách cụm khi đủ 4-5 giả hành. Phân lan rừng cần 3-5 năm thành thục.'},
+  {id:'sen-hong',   name:'Hoa Sen',            emoji:'🪷', latin:'Nelumbo nucifera',       region:'Toàn quốc',  diff:'Trung bình', type:'Hoa thủy sinh', color:'#f06292', plant:[3,4,5],    bloom:[6,7,8],   harvest:[9,10],
+   light:'8+h/ngày',temp:'25-35°C',hum:'N/A (thủy sinh)',pH:'6.5-8.0',
+   mix:'Đất sét nặng + phân hữu cơ hoai ở đáy chậu/ao. Ngập nước 20-40cm', drain:'Thủy sinh',
+   n:{seed:'Phân viên chậm tan đặt đáy bùn',grow:'NPK thủy sinh nhẹ',flower:'Phân Kali + Lân khi thấy nụ',fruit:'Giữ nước sạch'},
+   care:'Thay nước 2 tuần/lần. Cắt lá vàng. Đặt chỗ nắng tốt. Mùa đông có thể bị tàn nhưng tái sinh',
+   seed:'Tỷ lệ hạt 80-90% khi ngâm nước ấm 48h sau cạo vỏ. Ra hoa sau 1-2 năm. Hoặc trồng củ ngó.'},
+  {id:'sung',       name:'Hoa Súng (Water Lily)',emoji:'💧',latin:'Nymphaea lotus',        region:'Toàn quốc',  diff:'Dễ',          type:'Hoa thủy sinh', color:'#e1bee7', plant:[3,4,5],    bloom:[5,6,7,8], harvest:[],
+   light:'6-8h/ngày',temp:'22-32°C',hum:'N/A',pH:'6.0-8.0',
+   mix:'Đất sét đáy chậu/ao. Ngập nước 30-60cm', drain:'Thủy sinh',
+   n:{seed:'Phân viên thủy sinh đặt đáy',grow:'Phân hữu cơ ở đáy',flower:'Phân Kali khi ra nụ',fruit:'Đổi nước định kỳ'},
+   care:'Đặt chỗ nắng đủ. Cắt lá già và hoa tàn. Ít sâu bệnh nếu môi trường sạch',
+   seed:'Tách củ ngầm tỷ lệ 95%. Hoa nở ban ngày (ban đêm khép lại). Thơm nhẹ.'},
+  {id:'hoa-giong',  name:'Hoa Giong Giềng',   emoji:'🌺', latin:'Canna indica',            region:'Toàn quốc',  diff:'Dễ',          type:'Hoa nhiệt đới',color:'#ff6d00', plant:[3,4,5],    bloom:[6,7,8,9], harvest:[],
+   light:'6-8h/ngày',temp:'22-35°C',hum:'70-85%',pH:'6.0-7.5',
+   mix:'Đất thịt giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng củ',grow:'NPK 20-10-10 định kỳ',flower:'NPK 10-20-20 khi thấy nụ',fruit:'Phân Kali duy trì'},
+   care:'Tưới đẫm 3-4x/tuần. Cắt cụm hoa tàn ngay. Chia củ 2-3 năm/lần. Rất sung sức',
+   seed:'Tách củ chính và củ con dễ dàng. Hạt cứng, cần khía và ngâm 24h. Nảy mầm 7-14 ngày.'},
+  {id:'hoang-lan',  name:'Hoa Hoàng Lan',      emoji:'🌿', latin:'Cananga odorata',        region:'Miền Nam',   diff:'Dễ',          type:'Hoa thơm',     color:'#c8e6c9', plant:[4,5,6],    bloom:[5,6,7,8,9,10],harvest:[],
+   light:'7-8h/ngày',temp:'25-35°C',hum:'75-85%',pH:'5.5-7.0',
+   mix:'Đất thịt 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 định kỳ',flower:'Ít phân, cây ra hoa tự nhiên',fruit:'Phân hữu cơ duy trì'},
+   care:'Tưới 2x/tuần. Cây to bóng mát, trồng ngoài trời. Hoa thơm mạnh, dùng chưng cất tinh dầu',
+   seed:'Hạt tỷ lệ 60-70%, cần ngâm nước 48h. Giâm cành tỷ lệ 75%. Ra hoa sau 2-3 năm.'},
+  {id:'co-phuong',  name:'Hoa Cô Phượng',      emoji:'🌺', latin:'Delonix regia',          region:'Miền Nam',   diff:'Dễ',          type:'Cây cảnh',     color:'#ff1744', plant:[4,5],      bloom:[4,5,6],   harvest:[],
+   light:'8+h/ngày',temp:'22-35°C',hum:'60-80%',pH:'6.0-7.5',
+   mix:'Đất thịt pha cát 60% + phân hữu cơ 25% + sỏi 15%', drain:'Rất tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 1-2 lần/năm',flower:'Cây ra hoa tự nhiên, ít cần phân',fruit:'Phân hữu cơ duy trì'},
+   care:'Tưới 1-2x/tuần khi nhỏ. Cây lớn chịu hạn tốt. Rất ít sâu bệnh',
+   seed:'Hạt cứng, ngâm nước sôi nguội 24h, tỷ lệ 85-95%. Ra hoa sau 4-6 năm từ hạt.'},
+  {id:'me-tay',     name:'Hoa Muồng Hoàng Yến',emoji:'🌼',latin:'Cassia fistula',         region:'Toàn quốc',  diff:'Dễ',          type:'Cây cảnh',     color:'#ffd600', plant:[4,5,6],    bloom:[3,4,5],   harvest:[],
+   light:'7-8h/ngày',temp:'20-35°C',hum:'60-80%',pH:'6.0-7.5',
+   mix:'Đất thịt pha 60% + phân hữu cơ 25% + cát 15%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 hàng năm',flower:'Tự nhiên, ít cần kích',fruit:'Phân hữu cơ duy trì'},
+   care:'Tưới khi mới trồng, cây lớn chịu hạn tốt. Ít sâu bệnh',
+   seed:'Hạt cứng, ngâm nước 48h, tỷ lệ 80-90%. Ra hoa sau 3-5 năm.'},
+  {id:'truc-dao',   name:'Hoa Trúc Đào',       emoji:'🌸', latin:'Nerium oleander',        region:'Toàn quốc',  diff:'Dễ',          type:'Cây cảnh',     color:'#e91e63', plant:[3,4],      bloom:[4,5,6,7,8],harvest:[],
+   light:'6-8h/ngày',temp:'18-35°C',hum:'50-75%', pH:'6.0-7.5',
+   mix:'Đất thịt 60% + cát 25% + phân hữu cơ 15%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK cân bằng định kỳ',flower:'NPK K cao kích nụ',fruit:'Phân duy trì'},
+   care:'⚠️ CÂY ĐỘC - Không để trẻ em và thú cưng tiếp xúc! Chịu hạn, chịu mặn tốt',
+   seed:'Giâm cành tỷ lệ 85-90%. Hạt tỷ lệ 70%. Ra hoa sau 1-2 năm từ cành giâm.'},
+  {id:'phuong-tim', name:'Hoa Phượng Tím',     emoji:'💜', latin:'Jacaranda mimosifolia',  region:'Miền Nam',   diff:'Trung bình', type:'Cây cảnh',     color:'#7c4dff', plant:[4,5],      bloom:[3,4,5],   harvest:[],
+   light:'7-8h/ngày',temp:'15-30°C',hum:'55-75%',pH:'6.0-7.5',
+   mix:'Đất thịt pha 60% + phân hữu cơ 25% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ',grow:'NPK 15-10-10 + vi lượng',flower:'NPK thấp N cao K mùa khô',fruit:'Phân hữu cơ phục hồi'},
+   care:'Tưới 2x/tuần. Cần mùa khô để ra hoa. Cây bung hoa trước khi lá mọc',
+   seed:'Hạt nảy mầm 50-70%. Giâm cành khó hơn. Ra hoa sau 5-7 năm từ hạt.'},
+  {id:'hoa-sua',    name:'Hoa Sữa',            emoji:'⬜', latin:'Alstonia scholaris',     region:'Miền Bắc',   diff:'Dễ',          type:'Cây cảnh',     color:'#f5f5f5', plant:[4,5],      bloom:[10,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'15-30°C',hum:'65-80%',pH:'6.0-7.5',
+   mix:'Đất thịt 65% + phân hữu cơ 25% + cát 10%', drain:'Tốt',
+   n:{seed:'NPK 15-10-10 định kỳ',grow:'Phân hữu cơ hàng năm',flower:'Tự nhiên, ít cần kích',fruit:'Phân duy trì'},
+   care:'Tưới khi mới trồng. Cây lớn tự lập. Hoa thơm đặc trưng mùa thu Hà Nội',
+   seed:'Tỷ lệ hạt 60-70%. Cây to, thường trồng dọc phố.'},
+  {id:'bong-giay',  name:'Hoa Phù Dung',       emoji:'🌸', latin:'Hibiscus mutabilis',     region:'Toàn quốc',  diff:'Dễ',          type:'Hoa cảnh',     color:'#fce4ec', plant:[3,4,5],    bloom:[9,10,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'20-32°C',hum:'65-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 30% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK 20-10-10 định kỳ',flower:'NPK K cao kích nụ',fruit:'Phân hữu cơ'},
+   care:'Tưới 2-3x/tuần. Hoa đổi màu trong ngày (trắng sáng → hồng chiều → đỏ tối). Tỉa nhẹ sau mỗi mùa',
+   seed:'Giâm cành tỷ lệ 85-90%. Hoa to 15-20cm, rất ấn tượng.'},
+  {id:'dua-can',    name:'Hoa Dừa Cạn',        emoji:'🌸', latin:'Catharanthus roseus',    region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#e91e63', plant:[3,4,9,10], bloom:[5,6,7,8,11,12],harvest:[],
+   light:'5-8h/ngày',temp:'20-32°C',hum:'55-75%',pH:'5.5-7.0',
+   mix:'Đất thịt 55% + cát 25% + phân hữu cơ 20%', drain:'Tốt',
+   n:{seed:'NPK kích rễ loãng',grow:'NPK 20-20-20 định kỳ',flower:'NPK K cao',fruit:'Phân hữu cơ nhẹ'},
+   care:'Tưới 2x/ngày mùa nắng. Rất chịu hạn và nắng. Ngắt cành để ra hoa nhiều',
+   seed:'Tỷ lệ 85-90%. Gieo thẳng hoặc ươm. Ra hoa sau 60-70 ngày. Cây 1-2 năm.'},
+  {id:'phu-quoc',   name:'Hoa Phù Quốc',       emoji:'🌺', latin:'Ixora chinensis',        region:'Miền Nam',   diff:'Dễ',          type:'Hoa cảnh',     color:'#ff6d00', plant:[3,4,5],    bloom:[5,6,7,8,9],harvest:[],
+   light:'5-7h/ngày',temp:'22-35°C',hum:'70-85%',pH:'5.0-6.5',
+   mix:'Đất chua giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'NPK + Fe chelate khi trồng',grow:'NPK axit (21-7-14) + Fe định kỳ',flower:'NPK K cao + Fe để giữ màu',fruit:'Fe chelate phòng vàng lá'},
+   care:'Tưới 2-3x/tuần. Cần đất chua. Bổ sung Fe nếu lá vàng. Tỉa nhẹ sau đợt hoa',
+   seed:'Giâm cành tỷ lệ 80-85%. Cây bụi thấp, phù hợp làm viền hoặc hàng rào thấp.'},
+  {id:'bong-dua',   name:'Hoa Bông Dứa',       emoji:'🌿', latin:'Pandanus amaryllifolius', region:'Miền Nam',   diff:'Dễ',          type:'Hoa thơm',     color:'#a5d6a7', plant:[4,5,6],    bloom:[7,8],     harvest:[],
+   light:'5-7h/ngày',temp:'23-35°C',hum:'75-90%',pH:'5.5-7.0',
+   mix:'Đất thịt giàu mùn 70% + phân hữu cơ 25% + cát 5%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 định kỳ',flower:'Tự nhiên ít cần kích',fruit:'Phân hữu cơ'},
+   care:'Tưới 3x/tuần. Lá thơm dùng nấu ăn. Hiếm khi ra hoa trong chậu',
+   seed:'Tách chồi dễ dàng. Trồng chủ yếu lấy lá thơm.'},
+  {id:'trang-nguyen',name:'Hoa Trạng Nguyên',  emoji:'🔴', latin:'Euphorbia pulcherrima',  region:'Toàn quốc',  diff:'Trung bình', type:'Hoa cảnh',     color:'#d50000', plant:[9,10],     bloom:[12,1,2],  harvest:[],
+   light:'6-8h/ngày',temp:'15-28°C',hum:'55-70%',pH:'6.0-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 25% + cát 25%', drain:'Tốt',
+   n:{seed:'NPK 20-10-10 khi mới trồng',grow:'NPK cân bằng định kỳ',flower:'Kích đỏ bằng điều chỉnh quang kỳ: che tối 14h/ngày liên tục 8 tuần',fruit:'Phân K cao duy trì màu'},
+   care:'Tưới 2-3x/tuần. Cần quang kỳ ngắn (đêm dài) để đỏ. Lá bắc đỏ chứ không phải cánh hoa',
+   seed:'Giâm cành tỷ lệ 85-90%. Nhựa cây gây kích ứng da.'},
+  {id:'la-giang',   name:'Hoa Lài',            emoji:'⬜', latin:'Jasminum sambac',        region:'Toàn quốc',  diff:'Dễ',          type:'Hoa thơm',     color:'#ffffff', plant:[3,4,9,10], bloom:[4,5,6,7,8,9,10],harvest:[],
+   light:'5-7h/ngày',temp:'20-32°C',hum:'65-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 30% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK 20-10-10 + phân hữu cơ',flower:'NPK K cao + Bo kích nụ',fruit:'Phân hữu cơ phục hồi'},
+   care:'Tưới 2-3x/tuần. Cắt tỉa cành sau mỗi đợt hoa để ra lộc mới. Hoa thơm nhất ban đêm',
+   seed:'Giâm cành tỷ lệ 85-90%. Hoa dùng ướp trà, làm hương liệu.'},
+  {id:'thien-ly',   name:'Hoa Thiên Lý',       emoji:'💛', latin:'Telosma cordata',        region:'Toàn quốc',  diff:'Dễ',          type:'Hoa leo',      color:'#c8e6c9', plant:[3,4,5],    bloom:[5,6,7,8], harvest:[5,6,7,8],
+   light:'5-7h/ngày',temp:'22-32°C',hum:'70-80%',pH:'6.0-7.0',
+   mix:'Đất thịt giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 20-10-10 + phân hữu cơ 2 tháng/lần',flower:'NPK K cao khi nụ',fruit:'Giữ hái thường xuyên để ra nhiều đợt'},
+   care:'Tưới 2-3x/tuần. Làm giàn leo. Hái hoa cả chùm khi còn chớm nở. Nấu canh, luộc ăn được',
+   seed:'Giâm cành tỷ lệ 85%. Hoa vừa thơm vừa ăn được, đặc sản mùa hè.'},
+  {id:'mua-tim',    name:'Hoa Mua (Sim)',       emoji:'💜', latin:'Melastoma candidum',     region:'Miền Trung', diff:'Dễ',          type:'Hoa dại',      color:'#7c4dff', plant:[3,4],      bloom:[4,5,6],   harvest:[],
+   light:'6-8h/ngày',temp:'18-30°C',hum:'65-80%',pH:'4.5-6.0',
+   mix:'Đất chua đồi pha cát 70% + phân hữu cơ 20% + perlite 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ + Fe chelate',grow:'NPK axit + Fe chelate định kỳ',flower:'Tự nhiên, ít cần phân kích',fruit:'Fe chelate phòng vàng'},
+   care:'Tưới 2-3x/tuần. Cần đất chua, ít dinh dưỡng. Rất phù hợp vùng đồi núi',
+   seed:'Tỷ lệ hạt 70-80%. Nảy mầm 10-14 ngày. Cây bụi tự nhiên đẹp vùng đồi sim.'},
+  {id:'nhat-quat',  name:'Hoa Nhật Quật',      emoji:'🟠', latin:'Thunbergia grandiflora', region:'Toàn quốc',  diff:'Dễ',          type:'Hoa leo',      color:'#0288d1', plant:[4,5,6],    bloom:[7,8,9,10],harvest:[],
+   light:'6-8h/ngày',temp:'22-35°C',hum:'70-85%',pH:'5.5-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 30% + cát 15%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK 20-10-10 định kỳ',flower:'NPK K cao kích hoa',fruit:'Phân hữu cơ'},
+   care:'Làm giàn leo. Tưới 2-3x/tuần. Sinh trưởng mạnh, hoa xanh-tím đẹp',
+   seed:'Giâm cành tỷ lệ 85%. Cây leo rất mạnh, hoa quanh năm ở miền Nam.'},
+  {id:'nang-tien',  name:'Hoa Nắng Tiên (Daffodil)',emoji:'🌼',latin:'Narcissus pseudonarcissus',region:'Miền Bắc',diff:'Khó',type:'Hoa cảnh',color:'#ffd600',plant:[11,12],bloom:[1,2,3],harvest:[],
+   light:'4-6h sáng dịu',temp:'5-18°C',hum:'55-70%',pH:'6.0-7.0',
+   mix:'Cát pha 60% + phân hữu cơ 25% + perlite 15%', drain:'Rất tốt',
+   n:{seed:'Superphosphate khi trồng củ',grow:'NPK 10-20-20 sau nảy mầm',flower:'Ít phân khi hoa nở',fruit:'NPK cân bằng sau hoa để củ tích năng lượng'},
+   care:'Tưới vừa phải. Ủ lạnh củ 10-12 tuần trước trồng. Khó trồng nơi nóng',
+   seed:'Tách củ con (tỷ lệ 90%). Không trồng từ hạt thông thường.'},
+  {id:'hoa-hong-co',name:'Hoa Hồng Cổ (Old Rose)',emoji:'🌹',latin:'Rosa chinensis',      region:'Miền Bắc',   diff:'Trung bình', type:'Hoa cảnh',     color:'#c62828', plant:[11,12,1],  bloom:[3,4,5,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'15-26°C',hum:'60-70%',pH:'6.0-7.0',
+   mix:'Đất thịt 45% + phân hữu cơ 35% + cát 15% + vôi 5%', drain:'Tốt',
+   n:{seed:'NPK kích rễ + Canxi khi đầu',grow:'NPK 20-10-10 + phân hữu cơ',flower:'NPK K cao + Canxi khi nụ',fruit:'Magiê + vi lượng sau hoa'},
+   care:'Tưới gốc 2-3x/tuần. Tỉa cành khô và cành vượt sau hoa. Phun phòng nấm mùa mưa',
+   seed:'Giâm cành tỷ lệ 75-85%. Hoa thơm hơn hồng hiện đại.'},
+  {id:'hoa-bim-bim',name:'Hoa Bìm Bìm',        emoji:'💙', latin:'Ipomoea purpurea',       region:'Toàn quốc',  diff:'Dễ',          type:'Hoa leo',      color:'#3949ab', plant:[3,4,9,10], bloom:[5,6,7,8,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'20-35°C',hum:'60-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 60% + cát 25% + phân hữu cơ 15%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK 20-10-10 định kỳ',flower:'NPK K cao kích nụ',fruit:'Phân hữu cơ nhẹ'},
+   care:'Tưới 2x/ngày mùa nắng. Làm giàn cho leo. Hoa nở ban sáng, héo buổi chiều',
+   seed:'Tỷ lệ 85-90%. Ngâm nước 12h. Nảy mầm 5-7 ngày. Cây 1 năm.'},
+  {id:'hop-huong',  name:'Hoa Ngọc Lan',        emoji:'🌿', latin:'Michelia alba',          region:'Toàn quốc',  diff:'Dễ',          type:'Hoa thơm',     color:'#e8f5e9', plant:[3,4],      bloom:[4,5,6,7,8,9],harvest:[],
+   light:'6-8h/ngày',temp:'20-32°C',hum:'65-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 + phân hữu cơ',flower:'Tự nhiên, ít cần kích',fruit:'Phân hữu cơ duy trì'},
+   care:'Tưới 2x/tuần. Cây to, trồng sân vườn. Hoa thơm mạnh ban ngày và đêm',
+   seed:'Giâm cành tỷ lệ 70-75%. Ra hoa sau 2-3 năm từ cành giâm.'},
+  {id:'thanh-long', name:'Hoa Thanh Long',      emoji:'🌵', latin:'Hylocereus undatus',     region:'Miền Nam',   diff:'Dễ',          type:'Cây ăn quả',   color:'#ff80ab', plant:[4,5,6],    bloom:[5,6,7,8,9],harvest:[7,8,9,10,11],
+   light:'7-8h/ngày',temp:'25-35°C',hum:'60-80%',pH:'5.5-7.0',
+   mix:'Đất cát pha thoát nước tốt 60% + phân hữu cơ 25% + đất sét 15%', drain:'Rất tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 + K cao',flower:'NPK K cao + Bo kích đậu quả',fruit:'Canxi + K khi quả lớn'},
+   care:'Tưới 2x/tuần. Làm cọc trụ. Hoa nở đêm, cần thụ phấn thủ công. Chịu hạn rất tốt',
+   seed:'Giâm cành tỷ lệ 90-95%. Ra quả sau 1-2 năm. Hoa to 25-30cm, nở từ 20h-5h sáng.'},
+  {id:'xoan',       name:'Hoa Xoan',            emoji:'💜', latin:'Melia azedarach',        region:'Toàn quốc',  diff:'Dễ',          type:'Cây cảnh',     color:'#9c27b0', plant:[3,4],      bloom:[2,3,4],   harvest:[],
+   light:'6-8h/ngày',temp:'15-32°C',hum:'60-80%',pH:'6.0-7.5',
+   mix:'Đất thịt 65% + phân hữu cơ 25% + cát 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ khi trồng',grow:'NPK 15-10-10 hàng năm',flower:'Tự nhiên',fruit:'Phân hữu cơ'},
+   care:'Tưới khi mới trồng. Cây to chịu hạn. ⚠️ Quả và lá độc với người và động vật',
+   seed:'Hạt nảy mầm 70-80%. Ra hoa sau 3-4 năm. Cây mọc nhanh.'},
+  {id:'quỳnh',      name:'Hoa Quỳnh',           emoji:'🌙', latin:'Epiphyllum oxypetalum',  region:'Toàn quốc',  diff:'Dễ',          type:'Hoa cảnh',     color:'#ffffff', plant:[5,6,7],    bloom:[7,8,9,10],harvest:[],
+   light:'3-5h sáng dịu (ưa bóng)',temp:'22-32°C',hum:'65-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 40% + xơ dừa 30% + perlite 20% + phân hữu cơ 10%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ loãng định kỳ',grow:'NPK 20-20-20 nhẹ mỗi tháng',flower:'NPK K cao + giảm tưới trước nụ',fruit:'Dưỡng sau hoa'},
+   care:'Tưới 1-2x/tuần. Ưa bóng, không để nắng chiều. Hoa nở lúc nửa đêm, héo sáng',
+   seed:'Giâm cành tỷ lệ 90-95%. Hoa to 20-30cm, hương thơm nhẹ. Sự kiện hoa quỳnh nở!'},
+  {id:'thach-thao', name:'Hoa Thạch Thảo',      emoji:'💐', latin:'Ageratum houstonianum',  region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#7986cb', plant:[9,10,11],  bloom:[11,12,1,2,3],harvest:[],
+   light:'5-7h/ngày',temp:'15-28°C',hum:'55-70%',pH:'6.0-7.0',
+   mix:'Đất thịt 55% + phân hữu cơ 25% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK kích rễ loãng',grow:'NPK 20-20-20 định kỳ',flower:'NPK K cao kích nụ',fruit:'Phân hữu cơ'},
+   care:'Tưới 1-2x/ngày mùa nắng. Ngắt hoa tàn để ra hoa tiếp. Cây viền đẹp',
+   seed:'Tỷ lệ 80-90%. Gieo ươm trước 4-6 tuần. Ra hoa sau 60-70 ngày.'},
+  {id:'viola',      name:'Hoa Viola/Pensée',   emoji:'🌸', latin:'Viola tricolor hortensis',region:'Miền Bắc',   diff:'Trung bình', type:'Hoa cảnh',     color:'#7c4dff', plant:[9,10],     bloom:[12,1,2,3],harvest:[],
+   light:'5-6h sáng dịu',temp:'5-18°C',hum:'60-75%',pH:'5.5-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + perlite 20%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ',grow:'NPK cân bằng 2 tuần/lần',flower:'NPK K cao kích màu',fruit:'Phân hữu cơ phục hồi'},
+   care:'Tưới 1x/ngày. Cần mát và thoáng. Ngắt hoa tàn thường xuyên. Cây mùa đông',
+   seed:'Tỷ lệ 70-80%. Ươm ở chỗ mát. Ra hoa sau 70-90 ngày. Chỉ hợp Đà Lạt và vùng lạnh.'},
+  {id:'hoa-tuong-vi',name:'Hoa Tường Vi',      emoji:'🌸', latin:'Rosa multiflora',        region:'Miền Bắc',   diff:'Dễ',          type:'Hoa cảnh',     color:'#ef9a9a', plant:[11,12,1,2],bloom:[3,4,5],   harvest:[],
+   light:'6-8h/ngày',temp:'10-25°C',hum:'60-75%',pH:'6.0-7.0',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK cân bằng + phân hữu cơ',flower:'NPK K cao kích nụ',fruit:'Magiê + vi lượng'},
+   care:'Tưới 2x/tuần. Làm giàn leo. Hoa nhỏ nhưng nhiều, thơm nhẹ. Ít sâu bệnh hơn hồng thường',
+   seed:'Giâm cành tỷ lệ 80%. Ra hoa sau 1-2 năm từ cành giâm.'},
+  {id:'linh-lan',   name:'Hoa Linh Lan',       emoji:'🌿', latin:'Convallaria majalis',    region:'Miền Bắc',   diff:'Khó',         type:'Hoa cảnh',     color:'#ffffff', plant:[10,11],    bloom:[3,4,5],   harvest:[],
+   light:'3-5h sáng dịu',temp:'5-18°C',hum:'65-80%',pH:'5.5-7.0',
+   mix:'Đất giàu mùn 60% + xơ dừa 20% + perlite 20%', drain:'Tốt',
+   n:{seed:'Phân hữu cơ + Fe chelate khi trồng',grow:'NPK nhẹ cân bằng',flower:'NPK K cao kích hoa',fruit:'Phân hữu cơ sau hoa'},
+   care:'Tưới nhẹ 2x/tuần. Ưa bóng và mát. Khó trồng ở vùng nóng. Hoa thơm đặc trưng mùa xuân',
+   seed:'Nhân giống bằng tách thân rễ. Mỗi 3-4 năm chia 1 lần. Hoa trắng chuông nhỏ.'},
+  {id:'hoa-giay-leo',name:'Hoa Leo Stephanotis',emoji:'⬜',latin:'Stephanotis floribunda', region:'Miền Nam',   diff:'Trung bình', type:'Hoa leo',      color:'#ffffff', plant:[4,5],      bloom:[5,6,7,8], harvest:[],
+   light:'4-6h sáng dịu',temp:'20-30°C',hum:'70-80%',pH:'5.5-7.0',
+   mix:'Đất thịt 50% + xơ dừa 25% + perlite 25%', drain:'Tốt',
+   n:{seed:'NPK kích rễ',grow:'NPK cân bằng định kỳ',flower:'NPK K cao + Bo kích nụ',fruit:'Phân hữu cơ'},
+   care:'Tưới 2-3x/tuần. Làm giàn leo. Ưa độ ẩm cao. Hoa trắng thơm mạnh, hay dùng cưới hỏi',
+   seed:'Giâm cành tỷ lệ 75-80%. Ra hoa sau 2-3 năm.'},
+  {id:'dong-quy',   name:'Hoa Đồng Quỳ (Zinnia)',emoji:'🌻',latin:'Zinnia elegans',       region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#ff9800', plant:[3,4,9,10], bloom:[5,6,7,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'20-32°C',hum:'50-70%',pH:'6.0-7.5',
+   mix:'Đất thịt 55% + cát 25% + phân hữu cơ 20%', drain:'Tốt',
+   n:{seed:'NPK kích rễ nhẹ',grow:'NPK 20-20-20 định kỳ',flower:'NPK K cao kích màu',fruit:'Phân hữu cơ nhẹ'},
+   care:'Tưới gốc 1-2x/ngày. Không tưới lên lá (dễ nấm). Ngắt hoa tàn liên tục để ra hoa mới',
+   seed:'Tỷ lệ 85-90%. Gieo trực tiếp hoặc ươm. Nảy mầm 5-7 ngày. Ra hoa sau 60-70 ngày.'},
+  {id:'hoa-muop',   name:'Hoa Mướp',           emoji:'💛', latin:'Luffa aegyptiaca',       region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#ffd600', plant:[3,4,5],    bloom:[5,6,7,8], harvest:[7,8,9],
+   light:'7-8h/ngày',temp:'22-35°C',hum:'70-85%',pH:'6.0-7.5',
+   mix:'Đất thịt giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'NPK 20-10-10 khi lá mọc',grow:'NPK cân bằng + phân hữu cơ',flower:'NPK K cao khi nụ',fruit:'Canxi + K khi quả phát triển'},
+   care:'Tưới đẫm 2-3x/ngày mùa nắng. Làm giàn leo. Thu trái non để làm rau',
+   seed:'Tỷ lệ 85-90%. Ngâm nước 12h. Gieo trực tiếp gốc giàn. Ra hoa sau 45-60 ngày.'},
+
+  // THÊM MỚI – HOA TRỒNG PHỔ BIẾN Ở VIỆT NAM
+  {id:'trang-trinh', name:'Hoa Trang (Ixora)',  emoji:'🌺', latin:'Ixora coccinea',         region:'Miền Nam',   diff:'Dễ',          type:'Hoa cảnh',     color:'#ff1744', plant:[3,4,5],    bloom:[4,5,6,7,8,9,10],harvest:[],
+   light:'5-7h/ngày',temp:'22-35°C',hum:'70-85%',pH:'5.0-6.5',
+   mix:'Đất chua giàu mùn 60% + phân hữu cơ 30% + cát 10%', drain:'Tốt',
+   n:{seed:'NPK + Fe chelate khi trồng',grow:'NPK axit (21-7-14) mỗi tháng',flower:'NPK K cao + vi lượng Fe, Mn',fruit:'Fe chelate phòng vàng lá'},
+   care:'Tưới 2-3x/tuần. Đất cần chua pH 5-6.5. Tỉa nhẹ sau đợt hoa để ra đợt mới. Hoa đỏ rực rỡ cả mùa hè',
+   seed:'Giâm cành tỷ lệ 80-85%. Cây bụi thấp, phù hợp trồng viền hàng rào hoặc chậu lớn.'},
+  {id:'dep-bướm',    name:'Hoa Cẩm Tú Cầu',   emoji:'💙', latin:'Hydrangea macrophylla',  region:'Miền Bắc',   diff:'Trung bình', type:'Hoa cảnh',     color:'#7c4dff', plant:[2,3,9,10],  bloom:[4,5,6,7], harvest:[],
+   light:'4-6h sáng dịu',temp:'15-26°C',hum:'65-80%',pH:'5.0-7.0',
+   mix:'Đất giàu mùn 50% + xơ dừa 25% + phân hữu cơ 25%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ đầu',grow:'NPK 20-10-10 + phân hữu cơ',flower:'NPK thấp N cao P K',fruit:'Phân hữu cơ phục hồi sau hoa'},
+   care:'Tưới 3-4x/tuần, không để khô. Màu hoa phụ thuộc pH đất (chua → xanh, kiềm → hồng). Tỉa sau hoa tàn',
+   seed:'Giâm cành tỷ lệ 80-90%. Cây cần độ ẩm cao, tránh nắng trực tiếp buổi trưa.'},
+  {id:'hoa-phong-lan-den', name:'Hoa Địa Lan',emoji:'🌸', latin:'Cymbidium sinense',       region:'Miền Bắc',   diff:'Khó',         type:'Hoa cảnh',     color:'#d81b60', plant:[9,10],      bloom:[12,1,2,3],harvest:[],
+   light:'4-6h sáng dịu',temp:'12-25°C',hum:'70-80%',pH:'5.5-6.5',
+   mix:'Vỏ thông 50% + xơ dừa 25% + than hoa 15% + perlite 10%', drain:'Rất tốt',
+   n:{seed:'Phân lan 30-10-10 mùa tăng trưởng',grow:'Phân cân bằng 20-20-20',flower:'Phân 6-30-30 mùa thu, giảm nhiệt độ đêm',fruit:'Ít phân sau hoa'},
+   care:'Tưới 1x/tuần mùa lạnh. Cần nhiệt độ đêm dưới 15°C để ra hoa. Đặt chỗ sáng gián tiếp. Biểu tượng Tết miền Bắc',
+   seed:'Tách cụm giả hành 3-4 giả hành/cụm. Cần 2-4 năm để thích nghi và ra hoa.'},
+  {id:'hoa-mao-ga',  name:'Hoa Mào Gà',       emoji:'🔴', latin:'Celosia argentea',       region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#d32f2f', plant:[3,4,9,10],  bloom:[5,6,7,8,11,12],harvest:[],
+   light:'6-8h/ngày',temp:'20-35°C',hum:'50-75%',pH:'6.0-7.5',
+   mix:'Đất thịt 55% + phân hữu cơ 25% + cát 20%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ',grow:'NPK 20-20-20 định kỳ',flower:'NPK K cao tăng màu sắc',fruit:'Phân hữu cơ nhẹ'},
+   care:'Tưới gốc 1-2x/ngày. Rất chịu nắng nóng. Hoa đỏ rực trồng viền đường, ban công. Ra hoa liên tục',
+   seed:'Tỷ lệ 90-95%. Gieo thẳng hoặc ươm. Nảy mầm 5-7 ngày. Ra hoa sau 60-75 ngày.'},
+  {id:'hoa-bat-tien', name:'Hoa Bất Tử (Everlasting)',emoji:'🌼',latin:'Helichrysum bracteatum',region:'Miền Bắc',diff:'Dễ',type:'Hoa dại',color:'#ff8f00',plant:[9,10,11],bloom:[12,1,2,3,4],harvest:[1,2,3,4],
+   light:'6-8h/ngày',temp:'15-28°C',hum:'50-65%',pH:'6.0-7.5',
+   mix:'Đất thịt pha cát 60% + phân hữu cơ 25% + cát 15%', drain:'Rất tốt',
+   n:{seed:'NPK 10-20-20 nhẹ',grow:'NPK cân bằng định kỳ',flower:'NPK K cao kích màu',fruit:'Phân hữu cơ'},
+   care:'Tưới vừa phải 2x/tuần. Chịu khô tốt hơn ẩm. Hoa cắt phơi khô giữ nguyên màu sắc cả năm. Lý tưởng làm hoa khô',
+   seed:'Tỷ lệ 80-90%. Gieo hạt vào mùa thu. Nảy mầm 7-10 ngày. Ra hoa sau 90-100 ngày.'},
+  {id:'hoa-da-quy',  name:'Hoa Thược Dược',   emoji:'🌸', latin:'Dahlia pinnata',         region:'Miền Bắc',   diff:'Trung bình', type:'Hoa cảnh',     color:'#c2185b', plant:[10,11,12],  bloom:[1,2,3,4], harvest:[],
+   light:'6-8h/ngày',temp:'15-25°C',hum:'60-75%',pH:'6.0-7.5',
+   mix:'Đất thịt 50% + phân hữu cơ 30% + cát 15% + trấu hun 5%', drain:'Tốt',
+   n:{seed:'Superphosphate + phân hữu cơ khi trồng củ',grow:'NPK 20-10-10 mỗi 2 tuần',flower:'NPK 5-20-20 khi nụ xuất hiện',fruit:'Canxi + Bo + Magiê sau hoa'},
+   care:'Tưới 2-3x/tuần. Trồng củ sâu 10cm. Tỉa nhánh phụ cho hoa to. Cắm cọc cho cây cao. Hoa rực rỡ dịp Tết',
+   seed:'Tách củ con tỷ lệ 95%. Mỗi củ có thể ra 3-5 chồi mới. Ra hoa sau 3-4 tháng từ củ.'},
+  {id:'phu-quy',     name:'Hoa Phù Quỳ (Portulaca)',emoji:'🌺',latin:'Portulaca grandiflora',region:'Toàn quốc',diff:'Dễ',type:'Hoa dại',color:'#e91e63',plant:[3,4,5,9,10],bloom:[4,5,6,7,8,11],harvest:[],
+   light:'6-8h+/ngày',temp:'22-36°C',hum:'40-65%',pH:'5.5-7.5',
+   mix:'Đất cát pha 60% + phân hữu cơ 20% + cát 20%', drain:'Rất tốt',
+   n:{seed:'NPK nhẹ loãng',grow:'NPK 20-20-20 ít phân',flower:'Phân K thấp – cây tự nở nhiều',fruit:'Ít cần phân'},
+   care:'Tưới 1x/ngày. Cực kỳ chịu nắng và khô. Hoa đóng cửa khi mưa và ban đêm. Hoàn hảo cho ban công, mái nhà',
+   seed:'Tỷ lệ 90-95%. Gieo trực tiếp. Nảy mầm 3-5 ngày. Ra hoa sau 40-50 ngày. Tự gieo lại năm sau.'},
+  {id:'hong-ty-gon',  name:'Hoa Hồng Tỷ Muội',emoji:'🌹', latin:'Rosa chinensis minima',  region:'Toàn quốc',  diff:'Trung bình', type:'Hoa cảnh',     color:'#f06292', plant:[11,12,1,2],  bloom:[3,4,5,10,11],harvest:[],
+   light:'5-7h/ngày',temp:'18-30°C',hum:'60-75%',pH:'6.0-7.0',
+   mix:'Đất thịt 45% + phân hữu cơ 30% + cát 15% + trấu hun 10%', drain:'Tốt',
+   n:{seed:'NPK 10-52-10 kích rễ',grow:'NPK 20-10-10 mỗi 2 tuần',flower:'NPK 5-20-20 + Canxi + Bo khi nụ',fruit:'Magiê + vi lượng sau hoa'},
+   care:'Tưới gốc 2-3x/tuần. Tỉa cành nhánh đều đặn. Cây nhỏ trồng trong chậu rất đẹp. Hoa nhỏ xinh thơm nhẹ',
+   seed:'Giâm cành tỷ lệ 80-90%. Nhân giống dễ hơn hoa hồng thường. Hoa liên tục quanh năm.'},
+  {id:'hoa-lan-thuyen', name:'Hoa Lan Thuyền (Boat Orchid)',emoji:'🌿',latin:'Cymbidium goeringii',region:'Miền Bắc',diff:'Khó',type:'Hoa cảnh',color:'#a5d6a7',plant:[9,10],bloom:[1,2,3],harvest:[],
+   light:'3-5h sáng dịu',temp:'10-22°C',hum:'70-80%',pH:'5.5-6.5',
+   mix:'Vỏ thông 60% + than hoa 20% + xơ dừa 20%', drain:'Rất tốt',
+   n:{seed:'Phân lan loãng 20-20-20',grow:'NPK 30-10-10 mùa hè',flower:'Phân 6-30-30 mùa thu, giảm nhiệt',fruit:'Ít phân khi nghỉ đông'},
+   care:'Tưới nhẹ 1x/tuần mùa đông. Cần nhiệt đêm dưới 12°C để kích hoa. Hoa nhỏ tinh tế, thơm. Dễ tìm ở miền núi',
+   seed:'Tách cụm khi đủ 4-6 giả hành. Khó nhân giống từ hạt. Cần 3-5 năm từ cây con.'},
+  {id:'hoa-trinh-nu',  name:'Hoa Trinh Nữ',   emoji:'💜', latin:'Mimosa pudica',           region:'Toàn quốc',  diff:'Dễ',          type:'Hoa dại',      color:'#ba68c8', plant:[4,5,6],    bloom:[5,6,7,8,9],harvest:[],
+   light:'5-7h/ngày',temp:'20-35°C',hum:'60-80%',pH:'5.5-7.5',
+   mix:'Đất thịt pha 60% + cát 25% + phân hữu cơ 15%', drain:'Tốt',
+   n:{seed:'NPK nhẹ',grow:'Ít phân – cây chịu đất nghèo tốt',flower:'NPK K thấp, tự nhiên',fruit:'Phân hữu cơ nhẹ'},
+   care:'Tưới 2x/tuần. Lá tự khép khi chạm (hiệu ứng thú vị). Rất phù hợp trồng học sinh. Hoa cầu tím dễ thương',
+   seed:'Tỷ lệ hạt 80-90%. Gieo trực tiếp. Nảy mầm 7-14 ngày. Ra hoa sau 60-80 ngày.'},
+];
+
+// ============================================================
+//  DISEASES – 27 BỆNH PHỔ BIẾN Ở HOA
+// ============================================================
+const DISEASES = [
+  // ── NẤMFUNGAL ──
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Phấn Trắng', en:'Powdery Mildew',
+   sym:'Lớp bột trắng như vôi phủ trên mặt lá, chồi non, cành non. Lá xoăn, biến dạng, khô cháy dần. Nặng hơn trong điều kiện ẩm và thoáng kém.',
+   tx:'① Phun hỗn hợp baking soda 1 thìa + 1 lít nước + 5ml nước rửa chén.<br>② Dùng thuốc Hexaconazole (Anvil) hoặc Myclobutanil.<br>③ Tỉa bỏ các cành nhánh bị bệnh nặng và tiêu hủy.<br>④ Phun 2 lần cách nhau 7-10 ngày để diệt trừ dứt điểm.',
+   pre:'Không tưới lên lá. Tỉa cành thông thoáng. Tránh bón quá nhiều đạm. Phun phòng khi trời ẩm.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Đốm Đen', en:'Black Spot',
+   sym:'Chấm đen tròn viền vàng xuất hiện trên lá. Vùng xung quanh đốm vàng và lá rụng sớm. Phổ biến nhất ở hoa hồng vào mùa mưa.',
+   tx:'① Cắt bỏ và tiêu hủy ngay lá bị bệnh (không để trên đất).<br>② Phun thuốc gốc Đồng (Copper Hydroxide) hoặc Mancozeb, 3 lần × 7 ngày.<br>③ Thu gom lá rụng xung quanh gốc hàng tuần.<br>④ Tưới gốc, không tưới phun lên lá.',
+   pre:'Tưới gốc. Dọn sạch lá rụng. Phun phòng trước mùa mưa.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Rỉ Sắt', en:'Rust',
+   sym:'Xuất hiện mụn nhỏ màu cam-nâu đỏ như rỉ sắt ở mặt dưới lá. Mặt trên lá vàng nhạt tương ứng. Lá vàng và rụng nhiều.',
+   tx:'① Tỉa bỏ và đốt lá bị bệnh.<br>② Phun Tebuconazole (Folicur) hoặc Propiconazole 2 lần cách nhau 10 ngày.<br>③ Không tưới chiều tối để lá khô.',
+   pre:'Tỉa cành thông thoáng. Giữ lá khô. Phun phòng định kỳ mùa ẩm.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Thối Xám', en:'Gray Mold (Botrytis)',
+   sym:'Vết thối màu xám-nâu mềm nhũn trên cánh hoa, lá, thân non. Bề mặt phủ lớp tơ nấm xám. Phổ biến mùa đông ẩm lạnh.',
+   tx:'① Cắt bỏ và tiêu hủy tất cả phần bệnh ngay lập tức.<br>② Phun Iprodione (Rovral) hoặc Procymidone.<br>③ Giảm tưới, tăng thông gió xung quanh cây.<br>④ Tránh để hoa ẩm qua đêm.',
+   pre:'Không để lá hoa ẩm lâu. Tỉa cành thoáng. Kiểm tra thường xuyên mùa đông.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Héo Fusarium', en:'Fusarium Wilt',
+   sym:'Lá héo từ một bên thân, vàng rồi chết. Cắt thân thấy mạch dẫn nước màu nâu-đen bên trong. Rễ thối đen ở gốc.',
+   tx:'① Nhổ bỏ và tiêu hủy cây bệnh ngay.<br>② Xử lý đất bằng Trichoderma hoặc Metalaxyl trước khi trồng lại.<br>③ Không dùng lại đất cũ cho cùng loại cây.<br>④ Bón phân hữu cơ vi sinh tăng sức đề kháng.',
+   pre:'Xử lý đất trước trồng. Luân canh cây trồng. Không để nước đọng gốc.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Đốm Vòng', en:'Alternaria Leaf Spot',
+   sym:'Đốm tròn đồng tâm màu nâu-đen, có viền vàng hoặc đỏ. Trung tâm đốm khô và rụng thủng. Hay gặp ở hoa cúc, hoa huệ.',
+   tx:'① Cắt lá bệnh, tránh dính dịch ra lá lành.<br>② Phun Chlorothalonil hoặc Mancozeb mỗi 7-10 ngày.<br>③ Bón thêm Canxi để tăng độ cứng vách tế bào.',
+   pre:'Tưới gốc. Không để đất quá ẩm. Phun phòng mùa mưa.'},
+  {t:'fungal', lbl:'🍄 Nấm', cls:'dt-f', name:'Bệnh Thán Thư', en:'Anthracnose',
+   sym:'Vết chết mô màu nâu sậm trên lá, cành non, quả. Vùng bệnh có các ổ bào tử màu hồng cam ẩm ướt. Nặng làm cành chết khô.',
+   tx:'① Tỉa và tiêu hủy phần bị bệnh.<br>② Phun Azoxystrobin (Amistar) hoặc Thiophanate-methyl.<br>③ Phun 3 lần × 7-10 ngày trong mùa mưa.',
+   pre:'Dọn tàn dư thực vật. Tỉa thông thoáng. Không tưới phun khi trời ẩm.'},
+
+  // ── SÂU BỆNH PEST ──
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Rệp Sáp & Rệp Muội', en:'Aphids & Mealybug',
+   sym:'Con nhỏ màu trắng bông/đen/xanh bám dày ở ngọn, nách lá, mặt dưới lá. Tiết chất dính (mật rệp) thu hút nấm muội đen. Lá xoăn, cây còi.',
+   tx:'① Xịt nước mạnh rửa trôi toàn bộ cây.<br>② Phun dầu Neem 5ml/lít nước hoặc nước tỏi-ớt (5 tép tỏi + 5 quả ớt xay + 1 lít nước).<br>③ Nặng hơn: Imidacloprid hoặc Thiamethoxam theo liều khuyến cáo.<br>④ Phun 2-3 lần cách nhau 5 ngày.',
+   pre:'Kiểm tra hàng tuần. Trồng xen cây xua đuổi (húng quế, bạc hà). Bẫy dính vàng.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Nhện Đỏ', en:'Red Spider Mites',
+   sym:'Lá bạc màu, xuất hiện chấm trắng nhỏ trên mặt lá. Mặt dưới lá có tơ mỏng li ti. Cây suy kiệt nhanh khi trời nóng khô.',
+   tx:'① Tăng độ ẩm ngay lập tức bằng phun sương nhiều lần.<br>② Phun Abamectin (Vertimec) hoặc Spiromesifen theo liều.<br>③ Rửa lá bằng xà phòng loãng (2ml/lít).<br>④ Thay đổi thuốc sau 2-3 đợt để tránh kháng thuốc.',
+   pre:'Giữ độ ẩm cao. Phun nước lên lá định kỳ. Tránh để cây khô hạn kéo dài.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Bọ Trĩ', en:'Thrips',
+   sym:'Lá non xoăn tít, đầu ngọn lá khô cháy màu bạc. Nụ hoa thâm tím, biến dạng, không nở được. Cánh hoa có vệt trắng bạc.',
+   tx:'① Phun thuốc vào chiều tối (bọ trĩ hoạt động mạnh buổi tối).<br>② Dùng Spinosad hoặc Abamectin phun ướt đều cả mặt dưới lá.<br>③ Đặt bẫy dính màu vàng và xanh dương để giám sát.<br>④ Kết hợp nước tỏi ớt phun phòng.',
+   pre:'Bẫy dính vàng theo dõi sớm. Phun phòng định kỳ mỗi 2 tuần buổi tối.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Sâu Đục Thân', en:'Stem Borer',
+   sym:'Cành đột ngột héo rủ không hồi phục. Thấy lỗ nhỏ tròn trên thân và mùn cưa vụn bên dưới. Cành gãy dễ dàng.',
+   tx:'① Dùng dây thép mỏng hoặc que chọc vào lỗ để giết sâu.<br>② Tiêm vài giọt Chlorpyrifos hoặc cồn 70% vào lỗ, bịt lại bằng đất sét.<br>③ Cắt bỏ cành bị hại nặng và tiêu hủy.',
+   pre:'Tỉa cành khô mục. Bôi vôi trắng gốc cây. Quấn băng keo vàng dính vào gốc.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Sâu Ăn Lá', en:'Caterpillar / Leaf Eater',
+   sym:'Lá bị ăn thủng hoặc mất từng mảng. Thấy phân sâu màu xanh đen trên lá và đất. Sâu thường ẩn mặt dưới lá ban ngày.',
+   tx:'① Bắt sâu bằng tay vào buổi tối khi sâu hoạt động.<br>② Phun vi khuẩn Bt (Bacillus thuringiensis) – an toàn, hiệu quả cao.<br>③ Nặng hơn dùng Emamectin benzoate hoặc Indoxacarb.',
+   pre:'Kiểm tra mặt dưới lá hàng tuần. Dọn sạch tàn dư thực vật xung quanh gốc.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Ốc Sên & Sên Trần', en:'Snails & Slugs',
+   sym:'Lỗ thủng bất quy tắc trên lá non và cánh hoa. Để lại vệt nhờn bóng trên lá. Hoạt động mạnh ban đêm và sau mưa.',
+   tx:'① Đặt bẫy bia hoặc miếng gỗ ẩm để thu hút và bắt.<br>② Rắc diatomite (đất tảo cát) quanh gốc cây.<br>③ Dùng bẫy thuốc viên Metaldehyde đặt quanh gốc buổi tối.',
+   pre:'Dọn sạch lá mục gốc cây. Đặt vỏ trứng nghiền quanh chậu. Rắc cát thô quanh gốc.'},
+  {t:'pest', lbl:'🐛 Sâu bệnh', cls:'dt-p', name:'Bọ Cánh Cứng Hại Lá', en:'Leaf Beetle',
+   sym:'Lá bị ăn thành các vết tròn đều hoặc lỗ thủng nhỏ. Bọ màu đen bóng hoặc xanh kim loại, kích thước 3-6mm.',
+   tx:'① Bắt bọ bằng tay buổi sáng sớm khi chúng còn chậm chạp.<br>② Phun Cypermethrin hoặc Deltamethrin.<br>③ Phun nước tỏi ớt đuổi bọ.',
+   pre:'Kiểm tra thường xuyên. Luân canh cây trồng mỗi mùa.'},
+
+  // ── VI KHUẨN & VIRUS ──
+  {t:'bacterial', lbl:'☣️ Vi khuẩn', cls:'dt-b', name:'Bệnh Héo Xanh', en:'Bacterial Wilt',
+   sym:'Cây đang xanh tốt đột ngột héo rũ hoàn toàn dù đất đủ ẩm. Lá vẫn còn xanh ở giai đoạn đầu. Cắt thân thấy dịch vi khuẩn trắng đục chảy ra.',
+   tx:'① Không có thuốc đặc trị hiệu quả.<br>② Nhổ bỏ và tiêu hủy cây bệnh ngay lập tức.<br>③ Rắc vôi bột toàn bộ vùng đất, tưới dung dịch Copper Hydroxide.<br>④ Không trồng lại cùng họ cây trong 3-4 năm.',
+   pre:'Luân canh cây trồng. Xử lý đất trước trồng. Không để nước đọng gốc lâu.'},
+  {t:'bacterial', lbl:'☣️ Vi khuẩn', cls:'dt-b', name:'Bệnh Thối Nhũn Vi Khuẩn', en:'Soft Rot',
+   sym:'Mô cây thối mềm nhũn, ẩm ướt, có mùi hôi khó chịu. Bắt đầu từ vết thương hoặc gốc thân tiếp xúc đất ẩm. Phổ biến ở hoa lan, hoa huệ, cây mọng nước.',
+   tx:'① Cắt bỏ hoàn toàn phần thối, để vết cắt ở phần mô xanh khỏe.<br>② Rửa vết cắt bằng dung dịch Copper Sulfate 0.5% và để khô tự nhiên.<br>③ Giảm tưới ngay, tăng thông gió.<br>④ Phun Kasugamycin hoặc Streptomycin nếu nặng.',
+   pre:'Không để cây ẩm ướt kéo dài. Tránh làm tổn thương gốc khi làm cỏ. Dùng đất thoáng.'},
+  {t:'bacterial', lbl:'☣️ Vi khuẩn', cls:'dt-b', name:'Bệnh Đốm Góc Cạnh', en:'Angular Leaf Spot',
+   sym:'Vết bệnh hình đa giác (bị giới hạn bởi gân lá) màu nâu-đen ướt. Mặt dưới lá tiết dịch vi khuẩn khô lại thành lớp trắng. Lá rụng sớm.',
+   tx:'① Cắt lá bệnh, không tưới lên lá.<br>② Phun thuốc gốc Đồng (Bordeaux) hoặc Kasugamycin.<br>③ Phun 2-3 lần × 7 ngày.',
+   pre:'Tưới gốc. Không tưới lên lá. Tránh làm vườn khi cây ướt.'},
+  {t:'bacterial', lbl:'☣️ Virus', cls:'dt-b', name:'Bệnh Khảm Lá (Mosaic)', en:'Mosaic Virus',
+   sym:'Lá có vệt vàng-xanh loang lổ xen kẽ. Lá biến dạng, nhăn nhúm, nhỏ hơn bình thường. Cây phát triển chậm, hoa nhỏ ít sắc tố.',
+   tx:'① Không có thuốc đặc trị Virus.<br>② Tiêu hủy ngay cây bệnh để tránh lây lan.<br>③ Diệt triệt để rệp muội là vật trung gian truyền bệnh.<br>④ Khử trùng dụng cụ cắt tỉa bằng cồn 70% sau mỗi lần dùng.',
+   pre:'Kiểm soát rệp. Dùng hạt giống/cây giống sạch bệnh có chứng nhận.'},
+  {t:'bacterial', lbl:'☣️ Virus', cls:'dt-b', name:'Bệnh Vàng Lùn (Phytoplasma)', en:'Phytoplasma Yellows',
+   sym:'Toàn cây vàng nhạt, lá nhỏ, đốt ngắn lại. Hoa biến dạng thành lá xanh (virescence). Cây còi không lớn được.',
+   tx:'① Không có thuốc chữa trị.<br>② Nhổ bỏ và đốt cây bệnh ngay.<br>③ Phun thuốc diệt rầy lá (Imidacloprid) – vector truyền bệnh.<br>④ Trồng cây giống mới sạch bệnh.',
+   pre:'Kiểm soát rầy lá. Không lấy cành giâm từ cây bệnh.'},
+
+  // ── SINH LÝ PHYSIOLOGICAL ──
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Thối Rễ', en:'Root Rot',
+   sym:'Lá vàng đồng loạt từ dưới lên, rụng nhanh. Gốc cây mềm, có mùi hôi. Nhổ lên thấy rễ đen thối. Đất lúc nào cũng ướt sũng.',
+   tx:'① Ngừng tưới ngay lập tức.<br>② Nhổ cây, cắt bỏ toàn bộ rễ thối (màu đen/nâu mềm).<br>③ Để rễ khô ráo 30-60 phút, rắc Trichoderma lên vết cắt.<br>④ Trồng lại vào đất mới thoáng, chậu có lỗ thoát nước.',
+   pre:'Không tưới quá nhiều. Đất phải thoáng và thoát nước tốt. Chậu luôn có lỗ thoát.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Thiếu Đạm (N)', en:'Nitrogen Deficiency',
+   sym:'Lá già phía dưới vàng đồng đều từ gốc lên ngọn. Toàn cây xanh nhạt, sinh trưởng chậm, ít lá mới.',
+   tx:'① Bón NPK có N cao (20-5-5) hoặc phân cá pha loãng.<br>② Phun phân bón lá có N (ví dụ: Urea 0.5%) trực tiếp lên lá.<br>③ Bổ sung phân hữu cơ hoai mục.',
+   pre:'Bón NPK đều đặn mỗi 2-4 tuần. Kiểm tra pH đất (6-7) để N hấp thu được.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Thiếu Sắt (Fe)', en:'Iron Deficiency',
+   sym:'Lá non vàng nhạt nhưng gân lá vẫn xanh (chlorosis gân xanh). Thường gặp khi đất kiềm (pH > 7) dù có bón phân N.',
+   tx:'① Phun chelated iron (Fe-EDTA) lên lá ngay.<br>② Điều chỉnh pH đất xuống 6.0-6.5 bằng lưu huỳnh (sulfur) hoặc giấm loãng.<br>③ Bổ sung phân hữu cơ tăng độ chua tự nhiên.',
+   pre:'Kiểm tra pH đất định kỳ. Không bón quá nhiều vôi. Dùng đất chua cho cây ưa acid.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Thiếu Kali (K)', en:'Potassium Deficiency',
+   sym:'Mép và đầu lá cháy khô màu nâu như bị đốt. Lá già bị trước, lá non tương đối bình thường. Cây dễ ngã, hoa ít và kém màu.',
+   tx:'① Bón phân Kali (K2SO4 hoặc KCl) theo liều 1-2g/lít nước tưới.<br>② Phun phân bón lá giàu K + Mg.<br>③ Giảm bón N và P tạm thời.',
+   pre:'Bón NPK cân đối. Tránh bón quá nhiều đạm (N ức chế hấp thu K). Kiểm tra pH đất.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Cháy Lá Do Nắng', en:'Sunscald',
+   sym:'Mảng nâu-trắng bạc trên phần lá tiếp xúc nắng trực tiếp. Lá khô giòn, có ranh giới rõ với phần lá xanh khoẻ. Thường gặp khi chuyển cây từ tối ra nắng đột ngột.',
+   tx:'① Di chuyển cây vào nơi sáng nhẹ, tránh nắng gắt buổi trưa.<br>② Cắt bỏ lá đã bị cháy để cây tập trung dinh dưỡng.<br>③ Tưới nhiều hơn và bổ sung Canxi giúp tế bào phục hồi.',
+   pre:'Đưa cây ra nắng từ từ (3-5 ngày). Dùng lưới che nắng 30-50%. Không phơi nắng buổi 10h-14h.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Rụng Nụ Hoa', en:'Bud Drop',
+   sym:'Nụ hoa hình thành bình thường nhưng rụng hàng loạt trước khi nở. Thường do thay đổi đột ngột về môi trường.',
+   tx:'① Điều chỉnh chế độ tưới đều đặn hơn, không để khô hạn đột ngột.<br>② Bổ sung Bo (Boron) và Canxi theo liều nhỏ.<br>③ Tránh di chuyển cây khi đang có nụ.<br>④ Duy trì nhiệt độ ổn định, tránh gió lạnh đột ngột.',
+   pre:'Tưới đều đặn khi có nụ. Bổ sung Bo định kỳ. Không di chuyển cây đang nụ.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Ngộ Độc Phân Bón', en:'Fertilizer Burn',
+   sym:'Đầu và mép lá cháy nâu đột ngột sau khi bón phân. Rễ thối cháy. Cây héo dù đất đủ ẩm (do mất cân bằng thẩm thấu).',
+   tx:'① Tưới thật nhiều nước để rửa phân ra khỏi đất (3-4 lần tưới liên tiếp).<br>② Cắt bỏ lá cháy.<br>③ Để cây hồi phục 2-3 tuần trước khi bón phân lại với nồng độ thấp hơn.',
+   pre:'Luôn pha loãng phân bón đúng liều. Tưới đất ẩm trước khi bón. Không bón khi nắng gắt.'},
+  {t:'physiological', lbl:'🏜️ Sinh lý', cls:'dt-ph', name:'Thiếu Ánh Sáng', en:'Etiolation',
+   sym:'Thân vươn dài yếu ớt hướng về nguồn sáng. Lá mỏng, nhạt màu, khoảng cách giữa các lá dài hơn bình thường. Hoa ít và nhỏ.',
+   tx:'① Di chuyển cây ra nơi sáng hơn từ từ (3-5 ngày).<br>② Cắt tỉa bớt thân dài để cây đâm chồi mới cứng hơn.<br>③ Sử dụng đèn LED trồng cây chuyên dụng (grow light) nếu trong nhà.',
+   pre:'Đặt cây đúng nơi đủ sáng theo yêu cầu từng loài. Xoay chậu định kỳ 1-2 tuần.'},
+];
+
+
+// ============================================================
+//  STATE
+// ============================================================
+let activeFilter = 'all';
+let compareList = [];
+
+// ============================================================
+//  INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  populateProvinces();
+  renderHomeGrid();
+  renderLibGrid();
+  renderCalendar();
+  renderDiseases();
+});
+
+
+function renderHomeGrid() {
+  const featured = FLOWERS.filter((_,i) => i < 12);
+  renderGrid(document.getElementById('homeGrid'), featured, true);
+}
+
+// ============================================================
+//  LIBRARY GRID
+// ============================================================
+function renderLibGrid() {
+  const q = document.getElementById('searchBox')?.value.toLowerCase() || '';
+  const af = activeFilter;
+  const filtered = FLOWERS.filter(f => {
+    const matchQ = !q || f.name.toLowerCase().includes(q) || f.latin.toLowerCase().includes(q);
+    const matchF = af === 'all' || f.region === af || f.diff === af;
+    return matchQ && matchF;
+  });
+  document.getElementById('countBadge').textContent = `${filtered.length} loài`;
+  renderGrid(document.getElementById('libGrid'), filtered, false);
+}
+
+function applyFilters() { renderLibGrid(); }
+
+function setFilter(val, el) {
+  activeFilter = val;
+  document.querySelectorAll('.filter-chips .fchip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  renderLibGrid();
+}
+
+// ============================================================
+//  RENDER GRID
+// ============================================================
+function renderGrid(container, flowers, isHome) {
+  container.innerHTML = '';
+  if (!flowers.length) {
+    container.innerHTML = '<div class="empty" style="grid-column:1/-1"><span class="empty-icon">🔍</span>Không tìm thấy kết quả phù hợp</div>';
+    return;
+  }
+  flowers.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'fcard';
+    const inCmp = compareList.includes(f.id);
+    div.innerHTML = `
+      <div class="fcard-thumb" style="background:linear-gradient(135deg,${f.color}20,${f.color}40)">
+        ${f.emoji}
+        <div class="fcard-season-dot" style="background:${seasonColor(f.bloom)}"></div>
+      </div>
+      <div class="fcard-body">
+        <div class="fcard-name">${f.name}</div>
+        <div class="fcard-latin">${f.latin}</div>
+        <div class="fcard-tags">
+          <span class="tag tg-region">${f.region}</span>
+          <span class="tag tg-diff">${f.diff}</span>
+          <span class="tag tg-type">${f.type}</span>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:6px">
+          <button class="btn-sm" style="flex:1" onclick="openDetail('${f.id}')">📖 Chi tiết</button>
+          <button class="btn-sm ${inCmp?'done-btn':''}" onclick="toggleCompare('${f.id}',event)" title="So sánh">⊕</button>
+        </div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function seasonColor(bloom) {
+  if (!bloom?.length) return '#ccc';
+  const m = bloom[0];
+  if ([12,1,2].includes(m)) return '#90caf9';
+  if ([3,4,5].includes(m)) return '#a5d6a7';
+  if ([6,7,8].includes(m)) return '#ffcc02';
+  return '#ff8a65';
+}
+
+// ============================================================
+//  DETAIL PANEL
+// ============================================================
+function openDetail(id) {
+  const f = FLOWERS.find(x => x.id === id);
+  if (!f) return;
+  const sheet = document.getElementById('detailSheet');
+  sheet.innerHTML = `
+    <div class="detail-banner">
+      <div class="detail-emoji-big">${f.emoji}</div>
+      <div class="detail-title-area">
+        <div class="detail-name">${f.name}</div>
+        <div class="detail-latin">${f.latin}</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:4px">
+          <span class="tag tg-region">${f.region}</span>
+          <span class="tag tg-diff">${f.diff}</span>
+          <span class="tag tg-type">${f.type}</span>
+        </div>
+      </div>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body">
+
+      ${acc('☀️', 'Môi trường (Ánh sáng · Nhiệt độ · Độ ẩm)', `
+        <div class="info-chips">
+          <div class="ic"><div class="ic-label">🌞 Ánh sáng</div><div class="ic-val">${f.light}</div></div>
+          <div class="ic"><div class="ic-label">🌡️ Nhiệt độ</div><div class="ic-val">${f.temp}</div></div>
+          <div class="ic"><div class="ic-label">💧 Độ ẩm KK</div><div class="ic-val">${f.hum}</div></div>
+        </div>
+        <p>Phù hợp trồng tại <strong>${f.region}</strong>. ${f.diff === 'Khó' ? '⚠️ Cây khó trồng, cần điều kiện đặc biệt.' : f.diff === 'Dễ' ? '✅ Cây dễ trồng, thích nghi tốt.' : '🟡 Cây trung bình, cần chú ý chăm sóc.'}</p>
+      `, true)}
+
+      ${acc('🌱', 'Giá thể & Đất trồng', `
+        <div class="info-chips">
+          <div class="ic"><div class="ic-label">🧪 Độ pH</div><div class="ic-val">${f.pH}</div></div>
+          <div class="ic"><div class="ic-label">🌊 Thoát nước</div><div class="ic-val">${f.drain}</div></div>
+        </div>
+        <p>🪣 <strong>Công thức phối trộn:</strong> ${f.mix}</p>
+      `)}
+
+      ${acc('🧪', 'Dinh dưỡng & Phân bón theo giai đoạn', `
+        <div class="stage-nav">
+          <div class="sn on" onclick="stg(this,'sg1-${f.id}')">🌱 Cây con</div>
+          <div class="sn" onclick="stg(this,'sg2-${f.id}')">🌿 Sinh trưởng</div>
+          <div class="sn" onclick="stg(this,'sg3-${f.id}')">🌸 Ra hoa</div>
+          <div class="sn" onclick="stg(this,'sg4-${f.id}')">🍎 Kết quả</div>
+        </div>
+        <div class="sc on" id="sg1-${f.id}"><p>🌱 <strong>Cây con:</strong> ${f.n.seed}</p></div>
+        <div class="sc" id="sg2-${f.id}"><p>🌿 <strong>Sinh trưởng:</strong> ${f.n.grow}</p></div>
+        <div class="sc" id="sg3-${f.id}"><p>🌸 <strong>Ra hoa:</strong> ${f.n.flower}</p></div>
+        <div class="sc" id="sg4-${f.id}"><p>🍎 <strong>Kết quả:</strong> ${f.n.fruit}</p></div>
+      `)}
+
+      ${acc('✂️', 'Kỹ thuật Chăm sóc', `<p>${f.care}</p>`)}
+
+      ${acc('🌰', 'Hạt giống & Cây giống', `<p>${f.seed}</p>`)}
+
+      ${acc('📅', 'Lịch mùa vụ', `
+        <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:6px">
+          ${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<div style="text-align:center;font-size:0.65rem;font-weight:600;color:var(--text2)">${m}</div>`).join('')}
+          ${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>{
+            let bg = 'transparent';
+            if(f.plant?.includes(m)) bg='rgba(61,122,79,0.35)';
+            else if(f.bloom?.includes(m)) bg='rgba(181,69,27,0.3)';
+            else if(f.harvest?.includes(m)) bg='rgba(212,168,83,0.4)';
+            return `<div style="height:16px;border-radius:3px;background:${bg}"></div>`;
+          }).join('')}
+        </div>
+        <div style="margin-top:8px;display:flex;gap:10px;font-size:0.73rem;flex-wrap:wrap">
+          <span><span style="display:inline-block;width:10px;height:10px;background:rgba(61,122,79,0.4);border-radius:2px;margin-right:3px"></span>Mùa trồng</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:rgba(181,69,27,0.35);border-radius:2px;margin-right:3px"></span>Mùa hoa</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:rgba(212,168,83,0.45);border-radius:2px;margin-right:3px"></span>Thu hoạch</span>
+        </div>
+      `)}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+
+        <button class="btn" style="background:var(--blue);color:white" onclick="toggleCompare('${f.id}',null);closeDetail()">⊕ So sánh</button>
+      </div>
+    </div>`;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function acc(icon, title, body, open=false) {
+  return `<div class="acc${open?' open':''}">
+    <div class="acc-head" onclick="this.parentElement.classList.toggle('open')">
+      <span class="acc-icon">${icon}</span><span>${title}</span>
+      <span class="acc-arrow">▼</span>
+    </div>
+    <div class="acc-body">${body}</div>
+  </div>`;
+}
+
+function stg(el, id) {
+  el.closest('.acc-body').querySelectorAll('.sn').forEach(s => s.classList.remove('on'));
+  el.closest('.acc-body').querySelectorAll('.sc').forEach(s => s.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById(id)?.classList.add('on');
+}
+
+function closeDetail(e) {
+  if (!e || e.target === document.getElementById('detailOverlay')) {
+    document.getElementById('detailOverlay').classList.remove('open');
+  }
+}
+
+// ============================================================
+//  CALENDAR
+// ============================================================
+function renderCalendar() {
+  const tbl = document.getElementById('calendarTable');
+  const months = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+  let html = `<div style="display:grid;grid-template-columns:130px repeat(12,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="padding:8px 10px;font-size:0.73rem;font-weight:700;background:var(--text);color:#f7f3ee;border-bottom:1px solid var(--border)">🌸 Loài hoa</div>
+    ${months.map(m=>`<div style="text-align:center;font-size:0.7rem;font-weight:700;background:var(--text);color:#f7f3ee;padding:8px 2px;border-left:1px solid rgba(255,255,255,0.1);border-bottom:1px solid var(--border)">${m}</div>`).join('')}`;
+
+  FLOWERS.forEach((f,i) => {
+    const bg = i%2===0 ? 'var(--surface)' : 'var(--surface2)';
+    html += `<div style="padding:4px 8px;font-size:0.74rem;font-weight:500;background:${bg};border-top:1px solid var(--border);display:flex;align-items:center;gap:4px;overflow:hidden"><span style="font-size:0.9rem">${f.emoji}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.name}</span></div>`;
+    for (let m = 1; m <= 12; m++) {
+      let cellBg = bg;
+      let title = '';
+      if (f.plant?.includes(m)) { cellBg = 'rgba(61,122,79,0.28)'; title = 'Mùa trồng'; }
+      else if (f.bloom?.includes(m)) { cellBg = 'rgba(181,69,27,0.25)'; title = 'Hoa nở'; }
+      else if (f.harvest?.includes(m)) { cellBg = 'rgba(212,168,83,0.4)'; title = 'Thu hoạch'; }
+      html += `<div style="border-left:1px solid var(--border);border-top:1px solid var(--border);height:26px;background:${cellBg}" title="${f.name}: ${title}"></div>`;
+    }
+  });
+  html += '</div>';
+  tbl.innerHTML = html;
+}
+
+// ============================================================
+//  COMPARE
+// ============================================================
+function toggleCompare(id, e) {
+  if (e) e.stopPropagation();
+  const idx = compareList.indexOf(id);
+  if (idx === -1) {
+    if (compareList.length >= 3) { showToast('⚠️ Tối đa 3 loài hoa để so sánh'); return; }
+    compareList.push(id);
+  } else {
+    compareList.splice(idx, 1);
+  }
+  updateCompareBar();
+  renderLibGrid();
+}
+
+function updateCompareBar() {
+  const bar = document.getElementById('compareBar');
+  const slots = document.getElementById('cmpSlots');
+  if (!compareList.length) { bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  slots.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const id = compareList[i];
+    const f = id ? FLOWERS.find(x => x.id === id) : null;
+    const div = document.createElement('div');
+    div.className = `cslot ${f ? 'filled' : ''}`;
+    div.innerHTML = f ? `${f.emoji} ${f.name}` : '+ Thêm hoa';
+    slots.appendChild(div);
+  }
+}
+
+function clearCompare() {
+  compareList = [];
+  updateCompareBar();
+  renderLibGrid();
+}
+
+function showCompare() {
+  if (compareList.length < 2) { showToast('Hãy chọn ít nhất 2 loài để so sánh'); return; }
+  switchTab('compare');
+  const flowers = compareList.map(id => FLOWERS.find(f => f.id === id)).filter(Boolean);
+  const rows = [
+    ['🌍 Vùng trồng', f => f.region],
+    ['⚡ Độ khó', f => f.diff],
+    ['🌿 Loại cây', f => f.type],
+    ['☀️ Ánh sáng', f => f.light],
+    ['🌡️ Nhiệt độ', f => f.temp],
+    ['💧 Độ ẩm KK', f => f.hum],
+    ['🧪 Độ pH đất', f => f.pH],
+    ['🌊 Thoát nước', f => f.drain],
+    ['🌱 Giá thể', f => f.mix],
+    ['🌸 Mùa hoa', f => (f.bloom||[]).map(m=>`T${m}`).join(', ') || 'Quanh năm'],
+    ['📅 Mùa trồng', f => (f.plant||[]).map(m=>`T${m}`).join(', ') || '-'],
+    ['🧪 Chăm sóc', f => f.care.substring(0, 120) + '...'],
+    ['🌰 Hạt giống', f => f.seed.substring(0, 100) + '...'],
+  ];
+  let html = `<div style="overflow-x:auto"><table class="cmp-table">
+    <thead><tr><th>Tiêu chí</th>${flowers.map(f=>`<th>${f.emoji} ${f.name}</th>`).join('')}</tr></thead>
+    <tbody>
+    ${rows.map(([label, fn]) => `<tr><td class="row-label">${label}</td>${flowers.map(f=>`<td>${fn(f)}</td>`).join('')}</tr>`).join('')}
+    </tbody>
+  </table></div>
+  <div style="margin-top:12px;display:flex;gap:8px">
+    <button class="btn btn-amber" onclick="switchTab('library')">← Thêm hoa khác</button>
+    <button class="btn" style="background:var(--border);color:var(--text)" onclick="clearCompare();document.getElementById('compareTable').innerHTML='<div class=empty><span class=empty-icon>⚖️</span>Đã xóa so sánh</div>'">🗑️ Xóa so sánh</button>
+  </div>`;
+  document.getElementById('compareTable').innerHTML = html;
+}
+
+// ============================================================
+//  DISEASES
+// ============================================================
+function renderDiseases(type='all') {
+  const grid = document.getElementById('diseaseGrid');
+  const list = type === 'all' ? DISEASES : DISEASES.filter(d => d.t === type);
+  grid.innerHTML = list.map(d => `
+    <div class="dcard">
+      <span class="dtype ${d.cls}">${d.lbl}</span>
+      <div class="dname">${d.name} <span style="font-weight:400;font-size:0.73rem;color:var(--text2)">(${d.en})</span></div>
+      <div class="dsym">🔍 <strong>Dấu hiệu:</strong> ${d.sym}</div>
+      <div class="dtx">💊 <strong>Điều trị:</strong> ${d.tx}</div>
+      <div class="dpr">🛡️ <strong>Phòng ngừa:</strong> ${d.pre}</div>
+    </div>`).join('');
+}
+
+function filterDisease(type, el) {
+  document.querySelectorAll('.disease-filters .fchip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  renderDiseases(type);
+}
+
+// ============================================================
+//  PROVINCE DATA – 63 TỈNH THÀNH
+// ============================================================
+const PROVINCES = [
+  // MIỀN BẮC
+  {name:'Hà Nội',          temp:23.6, hum:79, region:'north'},
+  {name:'Hải Phòng',       temp:23.9, hum:82, region:'north'},
+  {name:'Hà Giang',        temp:21.4, hum:84, region:'north'},
+  {name:'Cao Bằng',        temp:20.1, hum:82, region:'north'},
+  {name:'Bắc Kạn',         temp:21.5, hum:83, region:'north'},
+  {name:'Tuyên Quang',     temp:23.0, hum:84, region:'north'},
+  {name:'Lào Cai',         temp:22.0, hum:84, region:'north'},
+  {name:'Điện Biên',       temp:21.0, hum:80, region:'north'},
+  {name:'Lai Châu',        temp:20.5, hum:81, region:'north'},
+  {name:'Sơn La',          temp:21.0, hum:80, region:'north'},
+  {name:'Yên Bái',         temp:22.5, hum:84, region:'north'},
+  {name:'Hòa Bình',        temp:22.5, hum:83, region:'north'},
+  {name:'Thái Nguyên',     temp:22.8, hum:82, region:'north'},
+  {name:'Lạng Sơn',        temp:21.2, hum:82, region:'north'},
+  {name:'Quảng Ninh',      temp:23.2, hum:82, region:'north'},
+  {name:'Bắc Giang',       temp:23.2, hum:80, region:'north'},
+  {name:'Phú Thọ',         temp:22.9, hum:85, region:'north'},
+  {name:'Vĩnh Phúc',       temp:23.5, hum:81, region:'north'},
+  {name:'Bắc Ninh',        temp:23.8, hum:80, region:'north'},
+  {name:'Hải Dương',       temp:23.6, hum:82, region:'north'},
+  {name:'Hưng Yên',        temp:23.5, hum:81, region:'north'},
+  {name:'Thái Bình',       temp:23.5, hum:85, region:'north'},
+  {name:'Hà Nam',          temp:23.5, hum:85, region:'north'},
+  {name:'Nam Định',        temp:23.6, hum:85, region:'north'},
+  {name:'Ninh Bình',       temp:23.5, hum:83, region:'north'},
+  // MIỀN TRUNG
+  {name:'Thanh Hóa',       temp:23.8, hum:84, region:'central'},
+  {name:'Nghệ An',         temp:23.9, hum:84, region:'central'},
+  {name:'Hà Tĩnh',         temp:24.5, hum:85, region:'central'},
+  {name:'Quảng Bình',      temp:24.5, hum:84, region:'central'},
+  {name:'Quảng Trị',       temp:24.9, hum:84, region:'central'},
+  {name:'Thừa Thiên Huế',  temp:25.1, hum:86, region:'central'},
+  {name:'Đà Nẵng',         temp:25.9, hum:80, region:'central'},
+  {name:'Quảng Nam',       temp:25.5, hum:79, region:'central'},
+  {name:'Quảng Ngãi',      temp:25.9, hum:80, region:'central'},
+  {name:'Bình Định',       temp:26.2, hum:80, region:'central'},
+  {name:'Phú Yên',         temp:26.5, hum:80, region:'central'},
+  {name:'Khánh Hòa',       temp:26.5, hum:76, region:'central'},
+  {name:'Ninh Thuận',      temp:27.4, hum:70, region:'central'},
+  {name:'Bình Thuận',      temp:27.3, hum:75, region:'central'},
+  // TÂY NGUYÊN
+  {name:'Kon Tum',         temp:21.5, hum:80, region:'highland'},
+  {name:'Gia Lai',         temp:22.0, hum:78, region:'highland'},
+  {name:'Đắk Lắk',         temp:23.5, hum:80, region:'highland'},
+  {name:'Đắk Nông',        temp:22.5, hum:83, region:'highland'},
+  {name:'Lâm Đồng',        temp:18.5, hum:85, region:'highland'},
+  // MIỀN NAM
+  {name:'Hồ Chí Minh',     temp:27.9, hum:75, region:'south'},
+  {name:'Bình Phước',      temp:26.9, hum:78, region:'south'},
+  {name:'Tây Ninh',        temp:27.3, hum:78, region:'south'},
+  {name:'Bình Dương',      temp:27.5, hum:77, region:'south'},
+  {name:'Đồng Nai',        temp:26.9, hum:78, region:'south'},
+  {name:'Bà Rịa - Vũng Tàu',temp:27.2,hum:78, region:'south'},
+  {name:'Long An',         temp:27.5, hum:81, region:'south'},
+  {name:'Tiền Giang',      temp:27.5, hum:83, region:'south'},
+  {name:'Bến Tre',         temp:27.4, hum:84, region:'south'},
+  {name:'Trà Vinh',        temp:27.4, hum:84, region:'south'},
+  {name:'Vĩnh Long',       temp:27.5, hum:83, region:'south'},
+  {name:'Đồng Tháp',       temp:27.5, hum:83, region:'south'},
+  {name:'An Giang',        temp:27.3, hum:82, region:'south'},
+  {name:'Kiên Giang',      temp:27.5, hum:82, region:'south'},
+  {name:'Cần Thơ',         temp:27.5, hum:83, region:'south'},
+  {name:'Hậu Giang',       temp:27.5, hum:83, region:'south'},
+  {name:'Sóc Trăng',       temp:27.4, hum:84, region:'south'},
+  {name:'Bạc Liêu',        temp:27.4, hum:84, region:'south'},
+  {name:'Cà Mau',          temp:27.6, hum:85, region:'south'},
+];
+
+const REGION_NAMES = {north:'🌿 Miền Bắc', central:'☀️ Miền Trung', highland:'🏔️ Tây Nguyên', south:'🌴 Miền Nam'};
+
+function populateProvinces() {
+  const sel = document.getElementById('provinceSelect');
+  const groups = {north:[], central:[], highland:[], south:[]};
+  PROVINCES.forEach(p => groups[p.region].push(p));
+  Object.entries(groups).forEach(([reg, list]) => {
+    const og = document.createElement('optgroup');
+    og.label = REGION_NAMES[reg];
+    list.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      opt.textContent = `${p.name}  (${p.temp}°C · ${p.hum}%)`; 
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
+function onProvinceChange() {
+  const name = document.getElementById('provinceSelect').value;
+  if (!name) return;
+  const prov = PROVINCES.find(p => p.name === name);
+  if (!prov) return;
+
+  const pills = document.getElementById('wPills');
+  pills.style.display = 'flex';
+  const climateLabel = prov.temp < 22 ? 'Mát lạnh' : prov.temp < 26 ? 'Ôn hòa' : 'Nhiệt đới nóng';
+  const humLabel = prov.hum < 75 ? 'Khô hanh' : prov.hum < 82 ? 'Vừa phải' : 'Ẩm ướt';
+  pills.innerHTML = `
+    <div class="pill">🌡️ TB: ${prov.temp}°C</div>
+    <div class="pill">💧 Độ ẩm: ${prov.hum}%</div>
+    <div class="pill">🌿 ${climateLabel}</div>
+    <div class="pill">🌊 ${humLabel}</div>
+    <div class="pill">${REGION_NAMES[prov.region]}</div>`;
+  document.getElementById('wChip').textContent = `📍 ${name} · ${prov.temp}°C · ${prov.hum}%`;
+
+  // Smart matching: region + difficulty diversity + type diversity
+  const regionMap = {north:'Miền Bắc', central:'Miền Trung', highland:'Miền Bắc', south:'Miền Nam'};
+  const myRegionLabel = regionMap[prov.region];
+
+  // Get matching flowers
+  let pool = FLOWERS.filter(f => f.region === myRegionLabel || f.region === 'Toàn quốc');
+
+  // Ensure type diversity: mix Hoa cảnh, Hoa nhiệt đới, Hoa thơm, Hoa dại, Cây ăn quả
+  const typeGroups = {};
+  pool.forEach(f => {
+    if (!typeGroups[f.type]) typeGroups[f.type] = [];
+    typeGroups[f.type].push(f);
+  });
+
+  // Ensure difficulty diversity
+  const easy = pool.filter(f => f.diff === 'Dễ');
+  const medium = pool.filter(f => f.diff === 'Trung bình');
+  const hard = pool.filter(f => f.diff === 'Khó');
+
+  // Pick diverse set: 5 easy, 4 medium, 2 hard (up to 12 total)
+  const pick = (arr, n) => arr.sort(() => Math.random() - 0.5).slice(0, n);
+  const selected = [...new Set([...pick(easy,5), ...pick(medium,4), ...pick(hard,2)])].slice(0, 12);
+
+  // Sort: Easy first, then Medium, then Hard
+  const diffOrder = {Dễ:0, 'Trung bình':1, Khó:2};
+  selected.sort((a,b) => diffOrder[a.diff] - diffOrder[b.diff]);
+
+  const suggestBox = document.getElementById('suggestBox');
+  suggestBox.classList.add('show');
+  document.getElementById('suggestTxt').innerHTML =
+    `Khí hậu <strong>${climateLabel} – ${humLabel}</strong> tại <strong>${name}</strong> (${prov.temp}°C · ${prov.hum}% độ ẩm) phù hợp với <strong>${selected.length} loài hoa</strong> sau:`;
+
+  const diffColors = {Dễ:'#43a047', 'Trung bình':'#f9a825', Khó:'#e53935'};
+  const cards = document.getElementById('suggestCards');
+  cards.innerHTML = selected.map(f => `
+    <div class="suggest-card-item" onclick="openDetail('${f.id}')">
+      <span style="font-size:1.3rem">${f.emoji}</span>
+      <div style="flex:1;min-width:0">
+        <div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
+        <div style="font-size:0.65rem;color:var(--text2);font-weight:400">${f.type}</div>
+      </div>
+      <span class="suggest-diff-badge" style="background:${diffColors[f.diff]}20;color:${diffColors[f.diff]};border:1px solid ${diffColors[f.diff]}40">${f.diff}</span>
+    </div>`).join('');
+
+  showToast(`✅ Tìm thấy ${selected.length} loài hoa phù hợp với ${name}!`);
+}
+
+
+
+// ============================================================
+//  SYMPTOM DIAGNOSIS
+// ============================================================
+// ============================================================
+//  AI PHOTO DIAGNOSIS
+// ============================================================
+function handlePhotoSelect(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  processPhotoFile(file);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) processPhotoFile(file);
+}
+
+function processPhotoFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = document.getElementById('imgPrev');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+    document.getElementById('aiResults').innerHTML = '';
+    const status = document.getElementById('aiStatus');
+    status.style.display = 'block';
+    // Delay for UX feel, then analyze
+    setTimeout(() => analyzeImage(ev.target.result), 1200);
+  };
+  reader.readAsDataURL(file);
+}
+
+function analyzeImage(dataURL) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.onload = function() {
+    const W = 120, H = 120;
+    canvas.width = W; canvas.height = H;
+    ctx.drawImage(img, 0, 0, W, H);
+    const data = ctx.getImageData(0, 0, W, H).data;
+    let white=0, yellow=0, brown=0, orange=0, gray=0, dark=0, green=0, total=0;
+    for (let i = 0; i < data.length; i += 4) {
+      const r=data[i], g=data[i+1], b=data[i+2];
+      total++;
+      const brightness = (r+g+b)/3;
+      const sat = Math.max(r,g,b) - Math.min(r,g,b);
+      if (brightness > 210 && sat < 30) white++;
+      else if (r > 180 && g > 160 && b < 90) yellow++;
+      else if (r > 140 && g > 90 && b < 70 && r > g) brown++;
+      else if (r > 180 && g > 90 && b < 60 && r-b > 100) orange++;
+      else if (brightness > 120 && brightness < 180 && sat < 25) gray++;
+      else if (brightness < 60) dark++;
+      else if (g > r+20 && g > b+20 && g > 80) green++;
+    }
+    const ratios = {
+      white: white/total, yellow: yellow/total, brown: brown/total,
+      orange: orange/total, gray: gray/total, dark: dark/total, green: green/total
+    };
+    const diagnoses = scoreImage(ratios);
+    document.getElementById('aiStatus').style.display = 'none';
+    showAIResults(diagnoses);
+  };
+  img.src = dataURL;
+}
+
+function scoreImage(r) {
+  const results = [];
+  // Powdery Mildew: high white, some gray
+  if (r.white > 0.12 || (r.white > 0.08 && r.gray > 0.08)) {
+    results.push({name:'Bệnh Phấn Trắng', en:'Powdery Mildew', conf: Math.min(95, Math.round((r.white*3 + r.gray)*200)), color:'#fff3e0', border:'#ffcc80', icon:'🤍', disease: DISEASES.find(d=>d.en==='Powdery Mildew')});
+  }
+  // Yellow leaf / nutrient deficiency
+  if (r.yellow > 0.15 || (r.yellow > 0.08 && r.brown < 0.08)) {
+    results.push({name:'Lá Vàng / Thiếu Dinh Dưỡng', en:'Nutrient Deficiency', conf: Math.min(92, Math.round((r.yellow*2.5)*200)), color:'#fff8e1', border:'#ffe082', icon:'💛', disease: DISEASES.find(d=>d.en==='Nitrogen Deficiency')});
+  }
+  // Brown spots / Blight / Alternaria
+  if (r.brown > 0.15) {
+    results.push({name:'Bệnh Đốm Nâu / Cháy Lá', en:'Leaf Blight', conf: Math.min(90, Math.round(r.brown*300)), color:'#efebe9', border:'#bcaaa4', icon:'🟤', disease: DISEASES.find(d=>d.en==='Alternaria Leaf Spot')});
+  }
+  // Rust: orange + brown
+  if (r.orange > 0.06 || (r.orange > 0.03 && r.brown > 0.06)) {
+    results.push({name:'Bệnh Rỉ Sắt', en:'Rust', conf: Math.min(88, Math.round((r.orange*4 + r.brown)*150)), color:'#fff3e0', border:'#ffb74d', icon:'🦀', disease: DISEASES.find(d=>d.en==='Rust')});
+  }
+  // Gray mold: gray + dark
+  if (r.gray > 0.14 && r.dark > 0.08) {
+    results.push({name:'Bệnh Thối Xám (Botrytis)', en:'Gray Mold', conf: Math.min(85, Math.round((r.gray+r.dark)*200)), color:'#eceff1', border:'#b0bec5', icon:'🌫️', disease: DISEASES.find(d=>d.en==='Gray Mold (Botrytis)')});
+  }
+  // Root rot: very dark
+  if (r.dark > 0.22) {
+    results.push({name:'Nghi Thối Rễ / Thối Gốc', en:'Root Rot', conf: Math.min(82, Math.round(r.dark*280)), color:'#efebe9', border:'#a1887f', icon:'🟤', disease: DISEASES.find(d=>d.en==='Root Rot')});
+  }
+  // Black spot: dark + low green
+  if (r.dark > 0.12 && r.green < 0.2) {
+    results.push({name:'Bệnh Đốm Đen', en:'Black Spot', conf: Math.min(80, Math.round(r.dark*250)), color:'#fce4ec', border:'#f48fb1', icon:'🖤', disease: DISEASES.find(d=>d.en==='Black Spot')});
+  }
+  // Default if nothing detected
+  if (!results.length) {
+    results.push({name:'Không Phát Hiện Bệnh Rõ Ràng', en:'Unclear', conf: 0, color:'#e8f5e9', border:'#a5d6a7', icon:'✅', disease: null});
+  }
+  // Sort by confidence desc
+  return results.sort((a,b) => b.conf - a.conf).slice(0,3);
+}
+
+function showAIResults(diagnoses) {
+  const container = document.getElementById('aiResults');
+  if (!diagnoses.length) return;
+
+  if (diagnoses[0].conf === 0) {
+    container.innerHTML = `
+      <div style="background:#e8f5e9;border:2px solid #a5d6a7;border-radius:16px;padding:20px;text-align:center">
+        <div style="font-size:2.5rem;margin-bottom:10px">✅</div>
+        <h3 style="color:#2e7d32;font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:8px">Cây có vẻ khoẻ mạnh!</h3>
+        <p style="font-size:0.84rem;color:#388e3c">Không phát hiện dấu hiệu bệnh rõ ràng. Hãy đảm bảo tưới đúng lịch và bón phân đều đặn.</p>
+        <button onclick="document.getElementById('photoInput').click()" class="btn btn-green" style="margin-top:12px">📸 Chụp ảnh khác</button>
+      </div>`;
+    return;
+  }
+
+  let html = `<div style="margin-bottom:12px">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700">🔬 Kết quả phân tích AI</h3>
+    <p style="font-size:0.78rem;color:var(--text2);margin-top:4px">Dựa trên phân tích màu sắc và mẫu bệnh trong ảnh</p>
+  </div>`;
+
+  diagnoses.forEach((d, i) => {
+    if (!d.disease && d.conf === 0) return;
+    const dis = d.disease;
+    html += `<div class="ai-result-card">
+      <div class="ai-result-header" style="background:${d.color}">
+        <span style="font-size:1.5rem">${d.icon}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;font-size:0.95rem">${i===0?'🎯 Khả năng cao nhất: ':''}${d.name}</div>
+          <div style="font-size:0.72rem;color:var(--text2);font-style:italic">${d.en}</div>
+          <div class="ai-conf-bar">
+            <div class="ai-conf-fill" style="width:${d.conf}%;background:${d.conf>75?'var(--green)':d.conf>50?'var(--accent2)':'var(--accent)'}"></div>
+          </div>
+          <div style="font-size:0.7rem;color:var(--text2);margin-top:2px">Độ tin cậy: ${d.conf}%</div>
+        </div>
+      </div>
+      ${dis ? `<div style="padding:14px 16px">
+        <div style="font-size:0.8rem;margin-bottom:10px;color:var(--text2);line-height:1.6"><strong>🔍 Triệu chứng:</strong> ${dis.sym}</div>
+        <div style="background:#e8f5e9;border-left:3px solid var(--green);padding:12px;border-radius:0 10px 10px 0;margin-bottom:10px">
+          <div style="font-weight:700;font-size:0.82rem;margin-bottom:8px;color:var(--green)">💊 Phác đồ điều trị:</div>
+          <div class="ai-steps">${dis.tx.split('<br>').map(step=>`<div class="ai-step">${step.replace(/^①|^②|^③|^④/,'').trim()}</div>`).join('')}</div>
+        </div>
+        <div style="font-size:0.75rem;color:var(--text2);padding:8px 10px;background:var(--surface2);border-radius:8px">🛡️ <strong>Phòng ngừa:</strong> ${dis.pre}</div>
+      </div>` : ''}
+    </div>`;
+  });
+
+  html += `<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="document.getElementById('photoInput').click()" class="btn btn-amber">📸 Chụp lại</button>
+    <button onclick="switchTab('disease')" class="btn btn-green">🔬 Xem tất cả bệnh</button>
+  </div>`;
+
+  container.innerHTML = html;
+  container.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ============================================================
+//  SYMPTOMS – QUICK DIAGNOSIS
+// ============================================================
+const SYMPTOMS = {
+  white: {title:'🤍 Bệnh Phấn Trắng (Powdery Mildew)', color:'#fff3e0', border:'#ffcc80',
+    desc:'Lớp bột trắng như phấn xuất hiện trên mặt lá, chồi non, thân cây. Lá bị biến dạng và khô dần.',
+    cause:'Do nấm Erysiphe spp. Phát triển mạnh khi độ ẩm cao 60-80%, thoáng gió kém, bón nhiều đạm.',
+    treat:'① Phun hỗn hợp baking soda 1 thìa + 1 lít nước + vài giọt nước rửa chén.<br>② Dùng thuốc chứa hoạt chất <strong>Hexaconazole (Anvil)</strong> hoặc Myclobutanil.<br>③ Tỉa cành thông thoáng sau khi phun. Phun nhắc lại sau 7-10 ngày.',
+    prevent:'Không tưới lên lá. Tỉa cành thoáng. Tránh bón nhiều đạm. Phun phòng mùa ẩm.'},
+  black: {title:'🖤 Bệnh Đốm Đen / Đốm Nâu (Black Spot / Blight)', color:'#fce4ec', border:'#f48fb1',
+    desc:'Đốm đen hoặc nâu tròn, có viền vàng trên lá. Lá vàng và rụng sớm. Phổ biến ở hoa hồng, hoa cúc.',
+    cause:'Do nấm Diplocarpon rosae (hoa hồng) hoặc Alternaria spp. Lây qua nước tưới bắn lên lá.',
+    treat:'① Cắt bỏ và tiêu hủy lá bệnh ngay.<br>② Phun thuốc gốc <strong>Đồng (Copper Hydroxide)</strong> hoặc <strong>Mancozeb</strong>, phun 3 lần × 7 ngày.<br>③ Thu gom lá rụng quanh gốc thường xuyên.<br>④ Bổ sung Canxi để tăng độ cứng tế bào.',
+    prevent:'Tưới gốc, không tưới lên lá. Dọn sạch lá rụng hàng tuần. Phun phòng trước mùa mưa.'},
+  yellow: {title:'💛 Lá Vàng – Nhiều Nguyên Nhân', color:'#fff8e1', border:'#ffe082',
+    desc:'Lá già vàng đồng đều (thiếu N). Lá non vàng gân xanh (thiếu Fe). Lá vàng + rụng nhanh (thối rễ). Vàng mép lá (thiếu K).',
+    cause:'Thiếu đạm, thiếu sắt do đất kiềm, tưới quá nhiều gây thối rễ, pH đất sai.',
+    treat:'① <strong>Thiếu đạm (lá già vàng đều):</strong> Bón NPK có N cao hoặc phân cá.<br>② <strong>Thiếu Fe (gân xanh lá vàng):</strong> Phun <strong>Fe Chelate-EDTA</strong> lên lá + điều chỉnh pH.<br>③ <strong>Thối rễ (vàng + rụng + mùi hôi):</strong> Ngừng tưới, thay đất.<br>④ <strong>Thiếu K (mép lá cháy):</strong> Bón K2SO4.',
+    prevent:'Bón phân đều đặn. Kiểm tra pH đất 6-7. Không để đất quá ẩm.'},
+  wilt: {title:'🥀 Cây Héo – Héo Xanh Vi Khuẩn / Fusarium', color:'#e8f5e9', border:'#a5d6a7',
+    desc:'Cây đột ngột héo rũ hoàn toàn dù đất đủ ẩm. Lá vẫn xanh (héo xanh vi khuẩn). Hoặc lá vàng rồi héo từ dưới lên (Fusarium).',
+    cause:'Vi khuẩn Ralstonia solanacearum hoặc nấm Fusarium oxysporum tấn công mạch dẫn nước.',
+    treat:'① Rất khó chữa – <strong>Nhổ bỏ ngay cây bệnh.</strong><br>② Rắc vôi bột + tưới Copper Hydroxide toàn vùng đất.<br>③ Không trồng lại cùng loại trong 3-4 năm.<br>④ Khử trùng dụng cụ bằng cồn 70% sau mỗi lần cắt tỉa.',
+    prevent:'Luân canh cây trồng. Xử lý đất với Trichoderma trước trồng. Không để nước đọng.'},
+  curl: {title:'🌀 Lá Xoăn / Biến Dạng – Bọ Trĩ / Rệp / Virus', color:'#e3f2fd', border:'#90caf9',
+    desc:'Lá non xoăn tít, đầu lá khô cháy bạc. Nụ hoa thâm biến dạng không nở. Hoặc lá loang lổ vàng-xanh (virus khảm).',
+    cause:'Bọ trĩ (Thrips) hút nhựa ngọn. Rệp muội tiết độc tố. Virus khảm lây qua côn trùng.',
+    treat:'① <strong>Bọ trĩ:</strong> Phun <strong>Spinosad hoặc Abamectin</strong> chiều tối, ướt đẫm mặt dưới lá.<br>② <strong>Rệp:</strong> Phun dầu Neem 5ml/lít + nước tỏi ớt.<br>③ <strong>Virus khảm:</strong> Tiêu hủy cây bệnh, diệt rệp làm vector.<br>④ Dùng bẫy dính màu vàng theo dõi.',
+    prevent:'Bẫy dính vàng giám sát. Phun phòng mỗi 2 tuần buổi tối. Kiểm tra ngọn non hàng tuần.'},
+  rot: {title:'🟤 Thối Gốc / Thối Rễ (Root & Crown Rot)', color:'#efebe9', border:'#bcaaa4',
+    desc:'Lá vàng đồng loạt và rụng nhanh. Gốc cây mềm nhũn, ẩm ướt, có mùi hôi thối. Nhổ cây lên thấy rễ đen nhũn.',
+    cause:'Tưới quá nhiều, đất không thoát nước, do nấm Pythium, Phytophthora, hoặc Rhizoctonia.',
+    treat:'① Ngừng tưới ngay lập tức.<br>② Nhổ cây, cắt bỏ toàn bộ rễ thối (màu đen/nâu mềm).<br>③ Để rễ khô 30-60 phút, bôi <strong>Trichoderma</strong> hoặc thuốc Metalaxyl lên vết cắt.<br>④ Trồng lại vào đất mới thoáng, chậu có lỗ thoát.',
+    prevent:'Không tưới quá nhiều. Đất và chậu luôn thoát nước tốt. Không để chậu ngâm trong nước.'},
+  rust: {title:'🦀 Bệnh Rỉ Sắt (Rust)', color:'#fff3e0', border:'#ffb74d',
+    desc:'Mụn nhỏ màu cam-nâu đỏ như rỉ sắt xuất hiện ở mặt dưới lá. Mặt trên lá có vệt vàng nhạt tương ứng. Lá vàng rụng nhiều.',
+    cause:'Do nấm Puccinia spp. Phát triển khi ẩm mát, thoáng gió kém. Bào tử lây qua gió.',
+    treat:'① Tỉa bỏ và đốt ngay lá bị bệnh.<br>② Phun <strong>Tebuconazole (Folicur)</strong> hoặc <strong>Propiconazole</strong>, phun 2 lần × 10 ngày.<br>③ Tránh tưới chiều tối để lá ướt qua đêm.',
+    prevent:'Tỉa cành thông thoáng. Giữ lá khô. Phun phòng định kỳ đầu mùa mưa.'},
+  pest: {title:'🐛 Sâu Bệnh – Rệp / Nhện Đỏ / Bọ Trĩ', color:'#f3e5f5', border:'#ce93d8',
+    desc:'Con nhỏ trắng/xanh/đen bám dày ngọn và nách lá (rệp). Hoặc lá bạc màu có tơ mặt dưới (nhện đỏ). Hoặc ngọn xoăn, hoa thâm (bọ trĩ).',
+    cause:'Rệp sáp, rệp muội, nhện đỏ, bọ trĩ hút nhựa cây. Thường bùng phát khi nóng khô.',
+    treat:'① Xịt nước mạnh rửa trôi côn trùng trước.<br>② Phun <strong>dầu Neem 5ml/lít</strong> hoặc nước tỏi-ớt (5 tép + 5 quả ớt + 1 lít).<br>③ <strong>Nhện đỏ:</strong> Phun <strong>Abamectin</strong> + tăng độ ẩm phun sương.<br>④ Nặng: Imidacloprid (rệp) hoặc Spiromesifen (nhện đỏ).',
+    prevent:'Kiểm tra hàng tuần. Bẫy dính vàng. Trồng xen húng quế. Giữ độ ẩm đủ.'},
+  mold: {title:'🌫️ Bệnh Thối Xám (Gray Mold / Botrytis)', color:'#eceff1', border:'#b0bec5',
+    desc:'Vết thối xám-nâu mềm nhũn phủ lớp tơ nấm xám trên cánh hoa, lá, chồi non. Hoa thối nhanh chóng. Phổ biến mùa đông ẩm lạnh.',
+    cause:'Do nấm Botrytis cinerea. Phát triển khi ẩm cao, thoáng kém, nhiệt độ thấp.',
+    treat:'① Cắt bỏ và tiêu hủy ngay tất cả phần bị bệnh.<br>② Phun <strong>Iprodione (Rovral)</strong> hoặc <strong>Procymidone</strong>.<br>③ Giảm tưới, tăng thông gió.<br>④ Tránh để hoa ẩm qua đêm.',
+    prevent:'Không để lá hoa ẩm lâu. Tỉa cành thoáng. Không tưới buổi tối. Kiểm tra kỹ mùa đông.'},
+  burn: {title:'🔥 Mép Lá Cháy Khô (Tip & Edge Burn)', color:'#fbe9e7', border:'#ffab91',
+    desc:'Mép và đầu lá cháy khô màu nâu. Lá vẫn xanh ở phần giữa. Thường bắt đầu từ lá già. Ranh giới rõ giữa phần cháy và phần xanh.',
+    cause:'Thiếu Kali (K). Bón phân quá liều gây ngộ độc muối. Thiếu nước tưới. Đất nhiễm mặn.',
+    treat:'① Tưới thật nhiều nước để rửa phân thừa ra khỏi đất.<br>② Bón bổ sung <strong>Kali (K2SO4)</strong> theo liều 1g/lít.<br>③ Phun phân bón lá có K + Mg.<br>④ Cắt bỏ lá cháy để cây tập trung dinh dưỡng.',
+    prevent:'Bón phân đúng liều. Tưới đều đặn, không để khô đột ngột. Kiểm tra pH và EC đất định kỳ.'},
+  mosaic: {title:'🟩 Đốm Vàng Xanh Loang (Mosaic Virus)', color:'#f9fbe7', border:'#aed581',
+    desc:'Lá có vệt vàng-xanh loang lổ xen kẽ không đều. Lá biến dạng, nhỏ hơn bình thường, nhăn nhúm. Cây phát triển chậm, hoa nhỏ.',
+    cause:'Virus khảm (TMV, CMV...) lây lan qua rệp muội và dụng cụ làm vườn không khử trùng.',
+    treat:'① Không có thuốc đặc trị Virus.<br>② Tiêu hủy ngay cây bệnh để tránh lây lan.<br>③ Diệt triệt để rệp muội (phun Imidacloprid).<br>④ Khử trùng kéo cắt bằng cồn 70° sau mỗi lần dùng.',
+    prevent:'Kiểm soát rệp. Dùng hạt giống có chứng nhận sạch bệnh. Vệ sinh dụng cụ thường xuyên.'},
+  bud: {title:'🌸 Nụ Hoa Rụng / Không Nở (Bud Drop)', color:'#e8eaf6', border:'#9fa8da',
+    desc:'Nụ hoa hình thành bình thường nhưng bất ngờ rụng trước khi nở. Có thể rụng hàng loạt chỉ sau 1-2 ngày.',
+    cause:'Tưới không đều đặn (khô ướt đột ngột). Thiếu Bo và Canxi. Di chuyển cây khi có nụ. Nhiệt độ thay đổi đột ngột.',
+    treat:'① Tưới đều đặn hơn, không để đất khô hoàn toàn rồi tưới ồ ạt.<br>② Bổ sung <strong>Bo (Borax 0.1g/lít)</strong> và <strong>Canxi (CaNO3)</strong> phun lá.<br>③ Không di chuyển cây khi đang có nụ.<br>④ Tránh để cây gần điều hòa hoặc luồng gió lạnh.',
+    prevent:'Tưới đều đặn khi có nụ. Bổ sung Bo + Ca định kỳ. Đặt cây nơi ổn định nhiệt độ.'},
+};
+
+function showSymptom(key) {
+  const s = SYMPTOMS[key];
+  if (!s) return;
+  // Highlight active button
+  document.querySelectorAll('#tab-photo .btn').forEach(b => b.style.fontWeight = '400');
+  document.getElementById('symptomResult').innerHTML = `
+    <div style="background:${s.color};border:2px solid ${s.border};border-radius:18px;padding:20px;margin-bottom:16px;animation:fadeUp 0.3s">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin-bottom:14px">${s.title}</h3>
+      <div style="display:grid;gap:12px;font-size:0.85rem;line-height:1.75">
+        <div><strong>🔍 Mô tả triệu chứng:</strong><br>${s.desc}</div>
+        <div><strong>⚠️ Nguyên nhân:</strong><br>${s.cause}</div>
+        <div style="background:rgba(255,255,255,0.65);border-radius:12px;padding:14px;border-left:3px solid rgba(0,0,0,0.1)">
+          <strong>💊 Phác đồ điều trị:</strong><br><div style="margin-top:6px">${s.treat}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.4);border-radius:10px;padding:10px"><strong>🛡️ Phòng ngừa:</strong><br>${s.prevent}</div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-green" onclick="switchTab('disease')" style="font-size:0.78rem;padding:8px 14px">🔬 Xem toàn bộ bệnh</button>
+        <button class="btn btn-amber" onclick="switchTab('photo');document.getElementById('photoInput').click()" style="font-size:0.78rem;padding:8px 14px">📸 Chẩn đoán bằng ảnh</button>
+      </div>
+    </div>`;
+  document.getElementById('symptomResult').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+
+
+
+
+function openProvinceSheet() {
+  const overlay = document.getElementById('provinceOverlay');
+  overlay.style.display = 'flex';
+  document.getElementById('provinceSearch').value = '';
+  renderProvinceList('');
+  setTimeout(() => document.getElementById('provinceSearch').focus(), 300);
+}
+
+function closeProvinceSheet(e) {
+  if (!e || (e.target && e.target === document.getElementById('provinceOverlay'))) {
+    document.getElementById('provinceOverlay').style.display = 'none';
+  }
+}
+
+function filterProvinceList() {
+  const q = document.getElementById('provinceSearch').value;
+  renderProvinceList(q);
+}
+
+function renderProvinceList(q) {
+  const list = document.getElementById('provinceList');
+  const lower = q.toLowerCase();
+  const groups = {north:[], central:[], highland:[], south:[]};
+  PROVINCES.forEach(p => {
+    if (!lower || p.name.toLowerCase().includes(lower)) groups[p.region].push(p);
+  });
+  const regionOrder = ['north','central','highland','south'];
+  let html = '';
+  regionOrder.forEach(reg => {
+    if (!groups[reg].length) return;
+    html += '<div style="padding:8px 20px 4px;font-size:0.72rem;font-weight:700;color:#6b5744;text-transform:uppercase;letter-spacing:0.06em">' + REGION_NAMES[reg] + '</div>';
+    groups[reg].forEach(p => {
+      const climateLabel = p.temp < 22 ? '🌿 Mát' : p.temp < 26 ? '🌤 Ôn hòa' : '☀️ Nóng';
+      html += '<div onclick="selectProvince(\'' + p.name.replace(/'/g,"\\'") + '\')" style="padding:13px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;active:background:#f0e8e0" onmouseover="this.style.background=\'#faf7f3\'" onmouseout="this.style.background=\'transparent\'">'
+        + '<div style="font-size:0.92rem;font-weight:600">' + p.name + '</div>'
+        + '<div style="display:flex;gap:8px;align-items:center">'
+        + '<span style="font-size:0.75rem;color:#6b5744">' + climateLabel + '</span>'
+        + '<span style="font-size:0.75rem;background:#f7f3ee;border:1px solid #e5ddd4;border-radius:6px;padding:2px 8px">' + p.temp + '°C · ' + p.hum + '%</span>'
+        + '</div></div>';
+    });
+  });
+  if (!html) html = '<div style="text-align:center;padding:30px;color:#6b5744;font-size:0.88rem">Không tìm thấy tỉnh thành nào</div>';
+  list.innerHTML = html;
+}
+
+function selectProvince(name) {
+  document.getElementById('provinceSelect').value = name;
+  document.getElementById('provinceBtnText').textContent = '📍 ' + name;
+  document.getElementById('provinceOverlay').style.display = 'none';
+  onProvinceChange();
+}
+
+
+// ============================================================
+//  NAVIGATION
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`tab-${name}`)?.classList.add('active');
+  document.querySelector(`.nav-item[data-tab="${name}"]`)?.classList.add('active');
+}
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('in');
+  setTimeout(() => t.classList.remove('in'), 3000);
+}
+</script>
+</body>
+</html>
